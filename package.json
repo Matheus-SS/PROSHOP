@@ -5,6 +5,7 @@
   "repository": "https://github.com/Matheus-SS/PROSHOP.git",
   "author": "Matheus Santos <matheus_sa_santos@hotmail.com>",
   "license": "MIT",
+  
 
   "scripts": {
     "start": "node dist/backend/server.js",
@@ -14,6 +15,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "tsnd backend/seeder.ts",
     "data:destroy": "tsnd backend/seeder.ts -d",
+    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
     "deploy":"git add . && git commit -m Heroku && git push heroku master"
   },
   "dependencies": {

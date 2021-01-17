@@ -4,6 +4,7 @@ import express, { Request, Response } from 'express';
 import 'colorts/lib/string';
 import { notFound, errorHandler } from './middleware/ErrorMiddleware';
 import connectDB from './config/database';
+import path from 'path';
 
 import routes from './routes';
 
@@ -13,11 +14,23 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/', (request: Request, response: Response) => {
-  response.send('API is running...');
-});
-
 app.use(routes);
+
+const __dirname = path.resolve();
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+  app.get('*', (request: Request, response: Response) =>
+    response.sendFile(
+      path.resolve(__dirname, 'frontend', 'build', 'index.html')
+    )
+  );
+} else {
+  app.get('/', (request: Request, response: Response) => {
+    response.send('API is running...');
+  });
+}
 
 // handling with status error 404
 app.use(notFound);

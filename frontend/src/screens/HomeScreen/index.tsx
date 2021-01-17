@@ -18,6 +18,7 @@ const HomeScreen = () => {
   });
 
   const { error, loading, products } = productListState;
+
   useEffect(() => {
     dispatch(listProducts());
   }, [dispatch]);
