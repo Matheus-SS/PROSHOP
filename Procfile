@@ -1,1 +1,1 @@
-web: tsnd --files backend/server.ts
+web: node dist/backend/server.js

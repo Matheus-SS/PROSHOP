@@ -5,13 +5,16 @@
   "repository": "https://github.com/Matheus-SS/PROSHOP.git",
   "author": "Matheus Santos <matheus_sa_santos@hotmail.com>",
   "license": "MIT",
-  "type": "module",
+
   "scripts": {
-    "start": "tsnd --files backend/server.ts",
+    "start": "node dist/backend/server.js",
+    "server": "tsnd --files backend/server.ts",
+    "postinstall": "tsc",
     "client": "npm start --prefix frontend",
-    "dev": "concurrently \"npm run start\" \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "tsnd backend/seeder.ts",
-    "data:destroy": "tsnd backend/seeder.ts -d"
+    "data:destroy": "tsnd backend/seeder.ts -d",
+    "deploy":"git add . && git commit -m Heroku && git push heroku master"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^8.5.0",
