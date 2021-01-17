@@ -5,18 +5,17 @@
   "repository": "https://github.com/Matheus-SS/PROSHOP.git",
   "author": "Matheus Santos <matheus_sa_santos@hotmail.com>",
   "license": "MIT",
-  
-
   "scripts": {
     "start": "node dist/backend/server.js",
     "server": "tsnd --files backend/server.ts",
-    "tsc":"tsc && rm -v -rf dist/frontend",
+    "copy-views": "cpx ./backend/views/** dist/backend/views",
+    "tsc": "tsc && yarn copy-views && rm -v -rf dist/frontend",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "tsnd backend/seeder.ts",
     "data:destroy": "tsnd backend/seeder.ts -d",
-    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend && npm run tsc",
-    "deploy":"git add . && git commit -m Heroku && git push heroku master"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend && npm run tsc",
+    "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^8.5.0",
@@ -24,6 +23,7 @@
     "@types/nodemailer-sendgrid": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "colorts": "^0.1.63",
+    "cpx": "^1.5.0",
     "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
