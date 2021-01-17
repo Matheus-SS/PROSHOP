@@ -15,7 +15,6 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "tsnd backend/seeder.ts",
     "data:destroy": "tsnd backend/seeder.ts -d",
-    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
     "deploy":"git add . && git commit -m Heroku && git push heroku master"
   },
   "dependencies": {
