@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node dist/backend/server.js",
     "server": "tsnd --files backend/server.ts",
-    "tsc":"tsc",
+    "tsc":"tsc && rm -v -rf dist/frontend",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "tsnd backend/seeder.ts",
