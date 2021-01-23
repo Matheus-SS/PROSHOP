@@ -30,9 +30,27 @@ export interface IProductState {
   readonly error: string;
 }
 
+export const initialDataForProduct = {
+  rating: 0,
+  numReviews: 0,
+  price: 0,
+  countInStock: 0,
+  _id: '1',
+  name: 'test',
+  image: 'test',
+  description: 'test',
+  brand: 'test',
+  category: 'test',
+  user: 'user',
+  __v: 0,
+  reviews: ['test'],
+  createdAt: '2000-10-10',
+  updatedAt: '2000-10-10',
+};
+
 // State types of the reducer product detail
 export interface IProductDetailState {
-  readonly product: IProduct | {};
+  readonly product: IProduct;
   readonly loading: boolean;
   readonly error: string;
 }
