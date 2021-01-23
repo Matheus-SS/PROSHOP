@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAddressInformation } from '../../store/modules/shippingAddress/ShippingAddressAction';
 
 import FormContainer from '../../components/FormContainer';
+import CheckoutSteps from '../../components/CheckoutSteps';
 
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
@@ -51,13 +52,17 @@ const ShippingScreen = ({ history }: RouteComponentProps) => {
     }
   }, [shippingAddressInfo, success]);
 
-  const submitHandler = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('submit');
-  }, []);
+  const submitHandler = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      history.push('/payment');
+    },
+    [history]
+  );
 
   return (
     <FormContainer>
+      <CheckoutSteps step1 step2 />
       <h1> Shipping</h1>
       {loading ? (
         <Loader />

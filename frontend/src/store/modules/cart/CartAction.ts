@@ -7,6 +7,9 @@ import {
   CART_REMOVE_ITEM_REQUEST,
   CART_REMOVE_ITEM_SUCCESS,
   CART_REMOVE_ITEM_FAIL,
+  CART_SAVE_PAYMENT_METHOD_REQUEST,
+  CART_SAVE_PAYMENT_METHOD_SUCCESS,
+  CART_SAVE_PAYMENT_METHOD_FAIL,
   CartDispatchTypes,
 } from './types/CartTypes';
 import { RootStore } from '../../../store';
@@ -72,6 +75,36 @@ export const removeFromCart = (product_id: string) => async (
   } catch (error) {
     dispatch({
       type: CART_REMOVE_ITEM_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+// this async is because is using redux thunk
+export const cartSavePaymentMethod = (paymentMethod: string) => async (
+  dispatch: Dispatch<CartDispatchTypes>,
+  getState: () => RootStore
+) => {
+  try {
+    dispatch({
+      type: CART_SAVE_PAYMENT_METHOD_REQUEST,
+    });
+
+    dispatch({
+      type: CART_SAVE_PAYMENT_METHOD_SUCCESS,
+      payload: paymentMethod,
+    });
+
+    localStorage.setItem(
+      '@ProShop:paymentMethod',
+      JSON.stringify(paymentMethod)
+    );
+  } catch (error) {
+    dispatch({
+      type: CART_SAVE_PAYMENT_METHOD_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

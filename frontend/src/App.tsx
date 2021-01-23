@@ -13,6 +13,8 @@ import ShippingScreen from './screens/ShippingScreen';
 import RegisterShippingScreen from './screens/RegisterShippingScreen';
 import ResetPasswordScreen from './screens/ResetPasswordScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import PaymentScreen from './screens/PaymentScreen';
+import PlaceOrderScreen from './screens/PlaceOrderScreen';
 
 import PageNotFound from './screens/PageNotFound';
 
@@ -24,6 +26,8 @@ const App = () => {
         <Container>
           <Switch>
             <Route exact path="/" component={HomeScreen} />
+            <Route path="/placeorder" component={PlaceOrderScreen} />
+            <Route path="/payment" component={PaymentScreen} />
             <Route path="/reset-password" component={ResetPasswordScreen} />
             <Route path="/forgot-password" component={ForgotPasswordScreen} />
             <Route path="/login" component={LoginScreen} />

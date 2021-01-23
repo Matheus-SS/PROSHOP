@@ -8,10 +8,14 @@ import {
   CART_REMOVE_ITEM_FAIL,
   CART_REMOVE_ITEM_SUCCESS,
   CART_REMOVE_ITEM_REQUEST,
+  CART_SAVE_PAYMENT_METHOD_REQUEST,
+  CART_SAVE_PAYMENT_METHOD_SUCCESS,
+  CART_SAVE_PAYMENT_METHOD_FAIL,
 } from '../types/CartTypes';
 
 const INITIAL_STATE: ICartState = {
   cartItems: [],
+  paymentMethod: '',
 };
 
 const cartReducer: Reducer<ICartState> = (
@@ -70,6 +74,24 @@ const cartReducer: Reducer<ICartState> = (
       return {
         ...state,
       };
+
+    case CART_SAVE_PAYMENT_METHOD_REQUEST:
+      return {
+        ...state,
+      };
+
+    case CART_SAVE_PAYMENT_METHOD_SUCCESS:
+      return {
+        ...state,
+        paymentMethod: action.payload,
+      };
+
+    case CART_SAVE_PAYMENT_METHOD_FAIL:
+      return {
+        ...state,
+        paymentMethod: action.payload,
+      };
+
     default:
       return state;
   }

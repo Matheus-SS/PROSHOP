@@ -5,12 +5,11 @@ import {
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_REQUEST,
   IProductDetailState,
-  initialDataForProduct,
 } from '../types/ProductTypes';
 
 // Initial Data
 const INITIAL_STATE: IProductDetailState = {
-  product: initialDataForProduct,
+  product: {},
   loading: false,
   error: '',
 };
@@ -32,7 +31,7 @@ const productDetailReducer: Reducer<IProductDetailState> = (
       return {
         loading: false,
         error: action.payload,
-        product: initialDataForProduct,
+        product: {},
       };
     default:
       return state;
