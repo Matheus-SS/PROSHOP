@@ -11,7 +11,7 @@ export interface IUser {
   updatedAt?: Date;
 
   //methods
-  matchPassword(password: string): Promise<boolean>;
+  // matchPassword(password: string): Promise<boolean>;
 }
 
 export interface IUserDocument extends IUser, Document {}
@@ -41,21 +41,6 @@ export const UserSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-UserSchema.methods.matchPassword = async function (
-  enteredPassword: string
-): Promise<boolean> {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
-
-// this function will be execute when update or create a user
-UserSchema.pre<IUserDocument>('save', async function (next: HookNextFunction) {
-  if (!this.isModified('password')) {
-    next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-});
 
 const User = mongoose.model<IUserDocument>('User', UserSchema);
 

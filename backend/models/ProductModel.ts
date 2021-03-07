@@ -17,7 +17,7 @@ export interface IProduct {
   updatedAt?: Date;
 }
 
-interface IProductDocument extends IProduct, Document {}
+export interface IProductDocument extends IProduct, Document {}
 
 const ProductSchema = new mongoose.Schema(
   {

@@ -3,138 +3,209 @@ import generateToken from '../utils/generateToken';
 import asyncHandler from 'express-async-handler';
 import User from '../models/UserModel';
 import ShippingAddress from '../models/ShippingAddressModel';
+import CreateUserService from '../services/users/CreateUserService';
+import UsersRepository from '../repositories/userRepository';
+import ShowUserProfileService from '../services/users/ShowUserProfileService';
+import AuthenticateUserService from '../services/users/AuthenticateUserService';
+import BCryptHashProvider from '../providers/PasswordHashProvider/BCryptHashProvider';
+export default class UserController {
+  // // @desc       Register a new user
+  // // @route      POST /api/users
+  // // @access     Public
+  public async createUser(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const { name, email, password } = request.body;
+    const createUser = new CreateUserService(
+      new UsersRepository(),
+      new BCryptHashProvider()
+    );
+    const { user, token } = await createUser.execute({ name, email, password });
 
-// @desc       Authenticate user & get token
-// @route      POST /api/users/login
-// @access     Public
-export const authenticateUser = asyncHandler(
-  async (request: Request, response: Response): Promise<Response> => {
+    return response.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: token,
+    });
+  }
+
+  // @desc       Get user profile
+  // @route      GET /api/users/profile
+  // @access     Private
+  public async getUserProfile(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const userId = request.userId;
+
+    const getUserProfile = new ShowUserProfileService(new UsersRepository());
+
+    const user = await getUserProfile.execute(userId);
+
+    return response.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  }
+
+  // @desc       Authenticate user & get token
+  // @route      POST /api/users/login
+  // @access     Public
+  public async authenticateUser(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
     const { email, password } = request.body;
 
-    const user = await User.findOne({ email });
+    const authenticateUser = new AuthenticateUserService(
+      new UsersRepository(),
+      new BCryptHashProvider()
+    );
 
-    if (!user) {
-      response.status(404);
-      throw new Error('Incorrect email/password combination.');
-    }
-
-    const matchedPassword = await user.matchPassword(password);
-
-    if (!matchedPassword) {
-      response.status(404);
-      throw new Error('Incorrect email/password combinantion.');
-    }
-
+    const { user, token } = await authenticateUser.execute({ email, password });
     return response.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token: generateToken(user._id),
+      token: token,
     });
   }
-);
+}
 
-// @desc       Get user profile
-// @route      GET /api/users/profile
-// @access     Private
-export const getUserProfile = asyncHandler(
-  async (request: Request, response: Response): Promise<Response> => {
-    const user = await User.findById(request.userId);
+// export const authenticateUser = asyncHandler(
+//   async (request: Request, response: Response): Promise<Response> => {
+//     const { email, password } = request.body;
 
-    if (!user) {
-      response.status(404);
-      throw new Error('User not found');
-    }
+//     const user = await User.findOne({ email });
 
-    return response.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    });
-  }
-);
+//     if (!user) {
+//       response.status(404);
+//       throw new Error('Incorrect email/password combination.');
+//     }
 
-// @desc       Register a new user
-// @route      POST /api/users
-// @access     Public
-export const createUser = asyncHandler(
-  async (request: Request, response: Response): Promise<Response> => {
-    const { name, email, password } = request.body;
+//     const matchedPassword = await user.matchPassword(password);
 
-    const isUser = await User.findOne({ email });
+//     if (!matchedPassword) {
+//       response.status(404);
+//       throw new Error('Incorrect email/password combinantion.');
+//     }
 
-    if (isUser) {
-      response.status(404);
-      throw new Error('User already exists');
-    }
+//     return response.status(200).json({
+//       _id: user._id,
+//       name: user.name,
+//       email: user.email,
+//       isAdmin: user.isAdmin,
+//       token: generateToken(user._id),
+//     });
+//   }
+// );
 
-    const user = await User.create({
-      name,
-      email,
-      password,
-    });
+// // @desc       Get user profile
+// // @route      GET /api/users/profile
+// // @access     Private
+// export const getUserProfile = asyncHandler(
+//   async (request: Request, response: Response): Promise<Response> => {
+//     const user = await User.findById(request.userId);
 
-    return response.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user._id),
-    });
-  }
-);
+//     if (!user) {
+//       response.status(404);
+//       throw new Error('User not found');
+//     }
 
-// @desc       Update user profile
-// @route      PUT /api/users/profile
-// @access     Private
-export const updateUserProfile = asyncHandler(
-  async (request: Request, response: Response): Promise<Response> => {
-    const user = await User.findById(request.userId);
+//     return response.status(200).json({
+//       _id: user._id,
+//       name: user.name,
+//       email: user.email,
+//       isAdmin: user.isAdmin,
+//     });
+//   }
+// );
 
-    if (!user) {
-      response.status(404);
-      throw new Error('User not found');
-    }
+// // @desc       Register a new user
+// // @route      POST /api/users
+// // @access     Public
+// export const createUser = asyncHandler(
+//   async (request: Request, response: Response): Promise<Response> => {
+//     const { name, email, password } = request.body;
 
-    const userWithUpdatedEmail = await User.findOne({
-      email: request.body.email,
-    });
+//     const isUser = await User.findOne({ email });
 
-    const parseIdToString = String(userWithUpdatedEmail?._id);
+//     if (isUser) {
+//       response.status(404);
+//       throw new Error('User already exists');
+//     }
 
-    if (userWithUpdatedEmail && parseIdToString !== request.userId) {
-      throw new Error('Email already in use');
-    }
+//     const user = await User.create({
+//       name,
+//       email,
+//       password,
+//     });
 
-    user.name = request.body.name || user.name;
-    user.email = request.body.email || user.email;
+//     return response.status(200).json({
+//       _id: user._id,
+//       name: user.name,
+//       email: user.email,
+//       isAdmin: user.isAdmin,
+//       token: generateToken(user._id),
+//     });
+//   }
+// );
 
-    if (request.body.password) {
-      user.password = request.body.password;
-    }
+// // @desc       Update user profile
+// // @route      PUT /api/users/profile
+// // @access     Private
+// export const updateUserProfile = asyncHandler(
+//   async (request: Request, response: Response): Promise<Response> => {
+//     const user = await User.findById(request.userId);
 
-    const updatedUser = await user.save();
+//     if (!user) {
+//       response.status(404);
+//       throw new Error('User not found');
+//     }
 
-    const shippingAddress = await ShippingAddress.findOne({
-      'user._id': request.userId,
-    });
+//     const userWithUpdatedEmail = await User.findOne({
+//       email: request.body.email,
+//     });
 
-    // updates the info from user in table shipping Address when user updates
-    if (shippingAddress) {
-      const newUpdatedUser = updatedUser.toObject();
-      shippingAddress.user = newUpdatedUser;
+//     const parseIdToString = String(userWithUpdatedEmail?._id);
 
-      await shippingAddress.save();
-    }
+//     if (userWithUpdatedEmail && parseIdToString !== request.userId) {
+//       throw new Error('Email already in use');
+//     }
 
-    return response.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      token: generateToken(updatedUser._id),
-    });
-  }
-);
+//     user.name = request.body.name || user.name;
+//     user.email = request.body.email || user.email;
+
+//     if (request.body.password) {
+//       user.password = request.body.password;
+//     }
+
+//     const updatedUser = await user.save();
+
+//     const shippingAddress = await ShippingAddress.findOne({
+//       'user._id': request.userId,
+//     });
+
+//     // updates the info from user in table shipping Address when user updates
+//     if (shippingAddress) {
+//       const newUpdatedUser = updatedUser.toObject();
+//       shippingAddress.user = newUpdatedUser;
+
+//       await shippingAddress.save();
+//     }
+
+//     return response.status(200).json({
+//       _id: updatedUser._id,
+//       name: updatedUser.name,
+//       email: updatedUser.email,
+//       isAdmin: updatedUser.isAdmin,
+//       token: generateToken(updatedUser._id),
+//     });
+//   }
+// )

@@ -1,30 +1,19 @@
+import ProductRepository from '../repositories/productRepository';
 import { Request, Response } from 'express';
+import ListAllProductService from '../services/products/ListAllProductsService';
+import ListProductByIdService from '../services/products/ListProductByIdService';
 
-import asyncHandler from 'express-async-handler';
-import Product from '../models/ProductModel';
-
-// @desc       Fetch all products
-// @route      GET /api/products
-// @access     Public
-export const getProducts = asyncHandler(
-  async (request: Request, response: Response): Promise<Response> => {
-    const products = await Product.find({});
+export default class ProductController {
+  public async getProducts(_: Request, response: Response): Promise<Response> {
+    const getProducts = new ListAllProductService(new ProductRepository());
+    const products = await getProducts.execute();
     return response.status(200).json(products);
   }
-);
 
-// @desc       Fetch single products
-// @route      GET /api/products/:id
-// @access     Public
-export const getProductById = asyncHandler(
-  async (request: Request, response: Response): Promise<Response> => {
-    const product = await Product.findById(request.params.id);
-
-    if (!product) {
-      response.status(404);
-      throw new Error('Product not Found');
-    }
+  public async getProductById(request: Request, response: Response) {
+    const getProductById = new ListProductByIdService(new ProductRepository());
+    const product = await getProductById.execute(request.params.id);
 
     return response.status(200).json(product);
   }
-);
+}

@@ -5,9 +5,8 @@ import 'colorts/lib/string';
 import { notFound, errorHandler } from './middleware/ErrorMiddleware';
 import connectDB from './config/database';
 import path from 'path';
-
 import routes from './routes';
-
+import './controllers/ProductController';
 connectDB();
 
 const app = express();

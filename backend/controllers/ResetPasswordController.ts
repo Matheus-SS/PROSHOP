@@ -32,8 +32,6 @@ export const sendForgotPasswordEmail = asyncHandler(
       'forgot-password.hbs'
     );
 
-    console.log(path.resolve(__dirname));
-
     if (process.env.NODE_ENV === 'development') {
       await sendMailFake({
         to: {
