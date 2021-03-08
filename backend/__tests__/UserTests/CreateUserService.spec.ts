@@ -31,4 +31,20 @@ describe('CreateUser', () => {
     expect(response.user).toHaveProperty('isAdmin');
     expect(response).toHaveProperty('token');
   });
+
+  it('it should NOT be able to create a new user with same email from another', async () => {
+    await createUserService.execute({
+      name: 'jhon',
+      email: 'jhon@gmail.com',
+      password: '123456',
+    });
+
+    await expect(
+      createUserService.execute({
+        name: 'jhon',
+        email: 'jhon@gmail.com',
+        password: '123456',
+      })
+    ).rejects.toBeInstanceOf(Error);
+  });
 });
