@@ -9,9 +9,9 @@ class ShowUserProfileService {
   }
 
   public async execute(id: string): Promise<IUserDocument> {
-    const user = this.userRepository.findById(id);
+    const user = await this.userRepository.findById(id);
 
-    if (user) {
+    if (!user) {
       throw new Error('User not found');
     }
 
