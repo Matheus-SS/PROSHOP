@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { IUserDocument } from '../models/UserModel';
+import { IUser, IUserDocument } from '../models/UserModel';
 
 import User from '../models/UserModel';
 
@@ -13,6 +13,7 @@ export interface IUsersRepository {
   create(userData: ICreateUserDTO): Promise<IUserDocument>;
   findByEmail(email: string): Promise<IUserDocument | null>;
   findById(id: string): Promise<IUserDocument | null>;
+  save(user:IUserDocument):Promise<IUserDocument>;
 }
 
 class UsersRepository implements IUsersRepository {
@@ -38,6 +39,10 @@ class UsersRepository implements IUsersRepository {
     const user = await this.user.findById(id);
 
     return user;
+  }
+
+  public async save(user:IUserDocument): Promise<IUserDocument> {
+    return await this.user.replaceOne(user._id,user);
   }
 }
 

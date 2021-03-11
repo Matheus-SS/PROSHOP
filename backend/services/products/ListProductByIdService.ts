@@ -1,3 +1,4 @@
+import { IProductDocument } from '../../models/ProductModel';
 import { IProductRepository } from '../../repositories/productRepository';
 
 class ListProductByIdService {
@@ -7,8 +8,8 @@ class ListProductByIdService {
     this.productRepository = productRepository;
   }
 
-  public async execute(id: string) {
-    const product = this.productRepository.findProductById(id);
+  public async execute(id: string):Promise<IProductDocument> {
+    const product = await this.productRepository.findProductById(id);
 
     if (!product) {
       throw new Error('Product not Found');

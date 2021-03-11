@@ -1,5 +1,4 @@
-import mongoose, { Document, HookNextFunction } from 'mongoose';
-import bcrypt from 'bcryptjs';
+import mongoose, { Document } from 'mongoose';
 
 export interface IUser {
   // properties
