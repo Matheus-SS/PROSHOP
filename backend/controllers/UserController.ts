@@ -2,12 +2,13 @@ import { Request, Response } from 'express';
 import generateToken from '../utils/generateToken';
 import asyncHandler from 'express-async-handler';
 import User from '../models/UserModel';
-import ShippingAddress from '../models/ShippingAddressModel';
 import CreateUserService from '../services/users/CreateUserService';
 import UsersRepository from '../repositories/userRepository';
 import ShowUserProfileService from '../services/users/ShowUserProfileService';
 import AuthenticateUserService from '../services/users/AuthenticateUserService';
 import BCryptHashProvider from '../providers/PasswordHashProvider/BCryptHashProvider';
+import UpdateUserProfileService from '../services/users/UpdateUserProfileService';
+import ShippingAddressRepository from '../repositories/shippingAddressRepository';
 export default class UserController {
   // // @desc       Register a new user
   // // @route      POST /api/users
@@ -68,11 +69,44 @@ export default class UserController {
     );
 
     const { user, token } = await authenticateUser.execute({ email, password });
+
     return response.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      token: token,
+    });
+  }
+
+  // @desc       Update user profile
+  // @route      PUT /api/users/profile
+  // @access     Private
+  public async updateUserProfile(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const { name, email, password } = request.body;
+    const userId = request.userId;
+
+    const updateUserProfile = new UpdateUserProfileService(
+      new UsersRepository(),
+      new BCryptHashProvider(),
+      new ShippingAddressRepository()
+    );
+
+    const { updatedUser, token } = await updateUserProfile.execute({
+      name,
+      email,
+      password,
+      userId,
+    });
+
+    return response.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
       token: token,
     });
   }

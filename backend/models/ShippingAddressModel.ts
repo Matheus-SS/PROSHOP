@@ -11,7 +11,7 @@ export interface IShippingAddress {
   updatedAt?: Date;
 }
 
-interface IShippingAddressDocument extends IShippingAddress, Document {}
+export interface IShippingAddressDocument extends IShippingAddress, Document {}
 
 const ShippingAddressSchema = new mongoose.Schema(
   {
