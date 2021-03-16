@@ -1,6 +1,6 @@
 import { IPasswordHashDTO } from '../PasswordHashDTO';
 
-class mockHashProvider implements IPasswordHashDTO {
+class mockBCryptHashProvider implements IPasswordHashDTO {
   public async hashPassword(enteredPassword: string): Promise<string> {
     const hashedPassword = enteredPassword;
     return hashedPassword;
@@ -14,4 +14,4 @@ class mockHashProvider implements IPasswordHashDTO {
   }
 }
 
-export default mockHashProvider;
+export default mockBCryptHashProvider;

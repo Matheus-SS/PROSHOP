@@ -9,8 +9,6 @@ export interface IUser {
   createdAt?: Date;
   updatedAt?: Date;
 
-  //methods
-  // matchPassword(password: string): Promise<boolean>;
 }
 
 export interface IUserDocument extends IUser, Document {}

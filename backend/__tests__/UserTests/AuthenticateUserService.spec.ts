@@ -1,18 +1,19 @@
 import MockUserRepository from '../../repositories/mocks/mockUserRepository';
-import MockHashProvider from '../../providers/PasswordHashProvider/mock/mockHashProvider';
+import MockBCryptHashProvider from '../../providers/PasswordHashProvider/mock/mockBCryptHashProvider';
 import AutheticateUserService from '../../services/users/AuthenticateUserService';
 
 let mockUserRepository: MockUserRepository;
-let mockHashProvider: MockHashProvider;
+let mockBCryptHashProvider: MockBCryptHashProvider;
 let authenticateUserService: AutheticateUserService;
+
 describe('Authenticate User', () => {
   beforeEach(() => {
     mockUserRepository = new MockUserRepository();
-    mockHashProvider = new MockHashProvider();
+    mockBCryptHashProvider = new MockBCryptHashProvider();
 
     authenticateUserService = new AutheticateUserService(
       mockUserRepository,
-      mockHashProvider
+      mockBCryptHashProvider
     );
   });
 
@@ -35,7 +36,7 @@ describe('Authenticate User', () => {
     expect(response).toHaveProperty('token');
   });
 
-  it('Should NOT be able to authenticate a user with WRONG email', async () => {
+  it('Should NOT be able to authenticate a user with WRONG EMAIL', async () => {
     await mockUserRepository.create({
       name: 'jhon',
       email: 'jhon@gmail.com',
@@ -50,7 +51,7 @@ describe('Authenticate User', () => {
     ).rejects.toBeInstanceOf(Error);
   });
 
-  it('Should NOT be able to authenticate a user with WRONG password', async () => {
+  it('Should NOT be able to authenticate a user with WRONG PASSWORD', async () => {
     await mockUserRepository.create({
       name: 'jhon',
       email: 'jhon@gmail.com',

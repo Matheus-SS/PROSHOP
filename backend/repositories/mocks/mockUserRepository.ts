@@ -27,5 +27,13 @@ class MockUsersRepository implements IUsersRepository {
 
     return user;
   }
+
+  public async save(user: IUserDocument): Promise<IUserDocument> {
+    const findIndex = this.users.findIndex(findUser => findUser._id === user._id)
+
+    this.users[findIndex] = user;
+
+    return user;
+  }
 }
 export default MockUsersRepository;

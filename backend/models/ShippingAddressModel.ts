@@ -2,7 +2,7 @@ import mongoose, { Document } from 'mongoose';
 import { UserSchema, IUserDocument } from './UserModel';
 
 export interface IShippingAddress {
-  user: mongoose.SchemaType;
+  user: IUserDocument;
   city: string;
   address: string;
   postalCode: string;
