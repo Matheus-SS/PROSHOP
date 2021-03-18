@@ -1,27 +1,22 @@
 import { IShippingAddressDocument } from '../../models/ShippingAddressModel';
-import {IShippingAddressRepository} from '../../repositories/shippingAddressRepository';
-import {
-  IUsersRepository,
-} from '../../repositories/userRepository';
+import { IShippingAddressRepository } from '../../repositories/shippingAddressRepository';
+import { IUsersRepository } from '../../repositories/userRepository';
 
-interface IRequestDTO  {
-  userId:string;
-  address:string;
-  city:string;
-  country:string;
-  postalCode:string;
-}
-
-interface IResponse extends Omit<IShippingAddressDocument,"user.password"> {
+interface IRequestDTO {
+  userId: string;
+  address: string;
+  city: string;
+  country: string;
+  postalCode: string;
 }
 
 class CreateShippingAddressService {
   private userRepository: IUsersRepository;
-  private shippingAddressRepository:IShippingAddressRepository;
+  private shippingAddressRepository: IShippingAddressRepository;
 
   constructor(
     userRepository: IUsersRepository,
-    shippingAddressRepository:IShippingAddressRepository
+    shippingAddressRepository: IShippingAddressRepository
   ) {
     this.userRepository = userRepository;
     this.shippingAddressRepository = shippingAddressRepository;
@@ -33,14 +28,16 @@ class CreateShippingAddressService {
     city,
     country,
     postalCode,
-  }: IRequestDTO): Promise<IResponse> {
-   const checkUserExists = await this.userRepository.findById(userId);
+  }: IRequestDTO): Promise<IShippingAddressDocument> {
+    const checkUserExists = await this.userRepository.findById(userId);
 
     if (!checkUserExists) {
       throw new Error('User not found');
     }
 
-    const isUserAlreadyHaveAddress = await this.shippingAddressRepository.findByUserId(userId);
+    const isUserAlreadyHaveAddress = await this.shippingAddressRepository.findByUserId(
+      userId
+    );
 
     if (isUserAlreadyHaveAddress) {
       throw new Error('User already has a registered address');
@@ -51,10 +48,10 @@ class CreateShippingAddressService {
       city,
       country,
       postalCode,
-      user:checkUserExists
+      user: checkUserExists,
     });
-    
-    const newShippingAddress:IResponse = shippingAddress.toObject();
+
+    const newShippingAddress = shippingAddress.toObject();
 
     delete newShippingAddress.user.password;
 

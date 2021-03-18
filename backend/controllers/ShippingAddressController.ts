@@ -3,54 +3,36 @@ import { Request, Response } from 'express';
 import asyncHandler from 'express-async-handler';
 import ShippingAddress from '../models/ShippingAddressModel';
 import User from '../models/UserModel';
+import ShippingAddressRepository from '../repositories/shippingAddressRepository';
+import UsersRepository from '../repositories/userRepository';
+import CreateShippingAddressService from '../services/shippingAddress/CreateShippingAddressService';
 
 export default class ShippingAddressController {
-
   // @desc       Register a new address
-// @route      POST /api/address
-// @access     Private
-public async createShippingAddress (request: Request, response: Response): Promise<Response> {
+  // @route      POST /api/address
+  // @access     Private
+  public async createShippingAddress(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
     const { address, city, postalCode, country } = request.body;
+    const userId = request.userId;
+    const createShippingAddressService = new CreateShippingAddressService(
+      new UsersRepository(),
+      new ShippingAddressRepository()
+    );
+
+    const shippingAddress = await createShippingAddressService.execute({
+      address,
+      city,
+      country,
+      postalCode,
+      userId,
+    });
+
+    return response.status(200).json(shippingAddress);
   }
 }
-// // @desc       Register a new address
-// // @route      POST /api/address
-// // @access     Private
-// export const createShippingAddress = asyncHandler(
-//   async (request: Request, response: Response): Promise<Response> => {
-//     const { address, city, postalCode, country } = request.body;
-
-//     const user = await User.findById(request.userId);
-
-//     if (!user) {
-//       response.status(404);
-//       throw new Error('User not found');
-//     }
-
-//     const isUserAlreadyHaveAddress = await ShippingAddress.findOne({
-//       'user._id': request.userId,
-//     });
-
-//     if (isUserAlreadyHaveAddress) {
-//       throw new Error('User already has a registered address');
-//     }
-
-//     const shippingAddress = await ShippingAddress.create({
-//       address,
-//       city,
-//       country,
-//       postalCode,
-//       user,
-//     });
-
-//     const newShippingAddress = shippingAddress.toObject();
-
-//     delete newShippingAddress.user.password;
-
-//     // show the shipping address without password field
-//     return response.status(200).json(newShippingAddress);
-//   }
-// );
 
 // // @desc       Get user address
 // // @route      GET /api/address

@@ -1,11 +1,6 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
 import UserController from '../controllers/UserController';
-import // authenticateUser,
-// getUserProfile,
-// createUser,
-// updateUserProfile,
-'../controllers/UserController';
 import { protect } from '../middleware/AuthenticationMiddleware';
 const userRouter = express.Router();
 const userController = new UserController();

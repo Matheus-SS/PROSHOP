@@ -3,28 +3,24 @@ import ShippingAddress, {
   IShippingAddressDocument,
 } from '../models/ShippingAddressModel';
 
-interface IUser {
-  _id: string;
-  name: string;
-  email: string;
-  password: string;
-  isAdmin?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+import { IUserDocument } from '../models/UserModel';
 
 export interface ICreateShippingAddressDTO {
-  address:string;
-  city:string;
-  country:string;
-  postalCode:string;
-  user:IUser;
+  address: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  user: IUserDocument;
 }
 
 export interface IShippingAddressRepository {
   findByUserId(id: string): Promise<IShippingAddressDocument | null>;
-  save(shippingAddress: IShippingAddressDocument): Promise<IShippingAddressDocument>;
-  create(shippingAddressData: ICreateShippingAddressDTO): Promise<IShippingAddressDocument>;
+  save(
+    shippingAddress: IShippingAddressDocument
+  ): Promise<IShippingAddressDocument>;
+  create(
+    shippingAddressData: ICreateShippingAddressDTO
+  ): Promise<IShippingAddressDocument>;
 }
 
 class ShippingAddressRepository implements IShippingAddressRepository {
@@ -34,9 +30,13 @@ class ShippingAddressRepository implements IShippingAddressRepository {
     this.shippingAddress = ShippingAddress;
   }
 
-  public async create(shippingAddressData:ICreateShippingAddressDTO): Promise<IShippingAddressDocument> {
-    const shippingAddress = await this.shippingAddress.create(shippingAddressData);
-    
+  public async create(
+    shippingAddressData: ICreateShippingAddressDTO
+  ): Promise<IShippingAddressDocument> {
+    const shippingAddress = await this.shippingAddress.create(
+      shippingAddressData
+    );
+
     return shippingAddress;
   }
 
