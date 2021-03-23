@@ -9,7 +9,10 @@
 
 # ProShop
 
-Aplicação de um e-commerce utilizando a stack MERN (Mongo, Express, React e Node) integrando o método de pagamento do paypal
+Aplicação de um e-commerce utilizando a stack MERN (Mongo, Express, React e Node) integrando o método de pagamento do paypal.
+Deploy da aplicação feita no heroku.
+
+[PROSHOP](https://proshop43.herokuapp.com/)
 
 Bibliotecas utilizadas até o momento:
 
@@ -25,6 +28,10 @@ Bibliotecas utilizadas até o momento:
 - [x] Colorts
 - [x] Redux
 - [x] Jason Web Token
+- [x] Jest
+- [x] Handlebars
+- [x] Sendgrid
+- [x] BCrypt
 
 ## Em desenvolvimento
 
@@ -51,6 +58,8 @@ Bibliotecas utilizadas até o momento:
 - [x] Error Middleware
 - [x] Authentication Middleware
 - [x] Routes
+- [ ] Services
+- [ ] Testing
 
 #### Models
 
@@ -58,20 +67,28 @@ Bibliotecas utilizadas até o momento:
 - [x] Product
 - [x] Review
 - [x] User
+- [x] Shipping Address
+- [x] User Token
 
 #### Routes
 
 ##### Products
 
-- [x] GET `/api/products` Return all products
-- [x] GET `/api/products/:id` Return a specific product by id
+- [x] GET `/api/products` Return all products (public)
+- [x] GET `/api/products/:id` Return a specific product by id (public)
 
 ##### User
 
-- [x] POST `/api/users/login` Login a user
-- [x] GET `/api/users/profile` Get logged in user info
-- [x] GET `/api/users` Register a user
-- [x] PUT `/api/users/profile` update a user
+- [x] POST `/api/users/login` Login a user (public)
+- [x] GET `/api/users/profile` Get logged in user info (private)
+- [x] GET `/api/users` Register a user (public)
+- [x] PUT `/api/users/profile` update a user (private)
+
+##### Shipping Address
+
+- [x] POST `/api/address` Create a shipping address (private)
+- [x] GET `/api/address` Get shipping address info (private)
+- [x] PUT `/api/address` update a shipping address (private)
 
 <!-- Caso deseje rodar na sua máquina, digite:
 

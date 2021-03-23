@@ -1,20 +1,20 @@
 import MockUserRepository from '../../repositories/mocks/mockUserRepository';
-import MockHashProvider from '../../providers/PasswordHashProvider/mock/mockHashProvider';
+import MockBCryptHashProvider from '../../providers/PasswordHashProvider/BCryptHashProvider';
 
 import CreateUserService from '../../services/users/CreateUserService';
 
 let mockUserRepository: MockUserRepository;
-let mockHashProvider: MockHashProvider;
+let mockBCryptHashProvider: MockBCryptHashProvider;
 let createUserService: CreateUserService;
 
 describe('CreateUser', () => {
   beforeEach(() => {
     mockUserRepository = new MockUserRepository();
-    mockHashProvider = new MockHashProvider();
+    mockBCryptHashProvider = new MockBCryptHashProvider();
 
     createUserService = new CreateUserService(
       mockUserRepository,
-      mockHashProvider
+      mockBCryptHashProvider
     );
   });
 

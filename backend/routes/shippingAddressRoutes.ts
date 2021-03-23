@@ -12,7 +12,11 @@ shippingAddressRouter.post(
   protect,
   asyncHandler(shippingController.createShippingAddress)
 );
-// shippingAddressRouter.get('/', protect, getUserShippingAddress);
+shippingAddressRouter.get(
+  '/',
+  protect,
+  asyncHandler(shippingController.getUserShippingAddress)
+);
 // shippingAddressRouter.put('/', protect, updateShippingAddress);
 
 export default shippingAddressRouter;

@@ -1,4 +1,4 @@
-import { v4 } from 'uuid';
+import { ObjectID } from 'mongodb';
 import { IUsersRepository, ICreateUserDTO } from '../userRepository';
 
 import User, { IUserDocument } from '../../models/UserModel';
@@ -21,7 +21,7 @@ class MockUsersRepository implements IUsersRepository {
   public async create(userData: ICreateUserDTO): Promise<IUserDocument> {
     const user = new User();
 
-    Object.assign(user, { _id: v4() }, userData);
+    Object.assign(user, { _id: new ObjectID() }, userData);
 
     this.users.push(user);
 
@@ -29,7 +29,9 @@ class MockUsersRepository implements IUsersRepository {
   }
 
   public async save(user: IUserDocument): Promise<IUserDocument> {
-    const findIndex = this.users.findIndex(findUser => findUser._id === user._id)
+    const findIndex = this.users.findIndex(
+      (findUser) => findUser._id === user._id
+    );
 
     this.users[findIndex] = user;
 
