@@ -1,5 +1,7 @@
-import ProductRepository from '../repositories/productRepository';
 import { Request, Response } from 'express';
+
+import ProductRepository from '../repositories/productRepository';
+
 import ListAllProductService from '../services/products/ListAllProductsService';
 import ListProductByIdService from '../services/products/ListProductByIdService';
 

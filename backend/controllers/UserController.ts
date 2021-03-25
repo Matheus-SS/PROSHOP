@@ -1,14 +1,14 @@
 import { Request, Response } from 'express';
-import generateToken from '../utils/generateToken';
-import asyncHandler from 'express-async-handler';
-import User from '../models/UserModel';
-import CreateUserService from '../services/users/CreateUserService';
 import UsersRepository from '../repositories/userRepository';
+import ShippingAddressRepository from '../repositories/shippingAddressRepository';
+
+import BCryptHashProvider from '../providers/PasswordHashProvider/BCryptHashProvider';
+
+import CreateUserService from '../services/users/CreateUserService';
 import ShowUserProfileService from '../services/users/ShowUserProfileService';
 import AuthenticateUserService from '../services/users/AuthenticateUserService';
-import BCryptHashProvider from '../providers/PasswordHashProvider/BCryptHashProvider';
 import UpdateUserProfileService from '../services/users/UpdateUserProfileService';
-import ShippingAddressRepository from '../repositories/shippingAddressRepository';
+
 export default class UserController {
   // // @desc       Register a new user
   // // @route      POST /api/users
