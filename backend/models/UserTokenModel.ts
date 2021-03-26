@@ -1,6 +1,4 @@
 import mongoose, { Document, Types } from 'mongoose';
-import crypto from 'crypto';
-import { promisify } from 'util';
 
 export interface IUserToken {
   // properties
@@ -10,10 +8,9 @@ export interface IUserToken {
   updatedAt?: Date;
 
   //methods
-  generateToken: () => Promise<string>;
 }
 
-interface IUserTokenDocument extends IUserToken, Document {}
+export interface IUserTokenDocument extends IUserToken, Document {}
 
 const UserTokenSchema = new mongoose.Schema(
   {
@@ -31,14 +28,6 @@ const UserTokenSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-UserTokenSchema.methods.generateToken = async function generateToken() {
-  const randBytes = promisify(crypto.randomBytes);
-  const bytes = await randBytes(20).catch((error) => {
-    throw new error();
-  });
-  return bytes.toString('hex');
-};
 
 const UserToken = mongoose.model<IUserTokenDocument>(
   'UserToken',
