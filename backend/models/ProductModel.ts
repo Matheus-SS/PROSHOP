@@ -6,7 +6,7 @@ export interface IProduct {
   name: string;
   image: string;
   brand: string;
-  category: boolean;
+  category: string;
   description: string;
   reviews: mongoose.Schema[];
   rating: number;

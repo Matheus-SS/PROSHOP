@@ -25,6 +25,7 @@ const importData = async () => {
     const sampleProducts = products.map((product) => {
       return {
         ...product,
+        reviews: [],
         user: adminUser,
       };
     });
