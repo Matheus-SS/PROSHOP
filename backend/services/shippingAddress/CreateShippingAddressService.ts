@@ -51,9 +51,14 @@ class CreateShippingAddressService {
       user: checkUserExists,
     });
 
-    const newShippingAddress = shippingAddress.toObject();
-
-    delete newShippingAddress.user.password;
+    const newShippingAddress = shippingAddress.toObject<IShippingAddressDocument>(
+      {
+        transform: (doc, ret) => {
+          delete ret.user?.password;
+          return ret;
+        },
+      }
+    );
 
     // show the shipping address without password field
     return newShippingAddress;

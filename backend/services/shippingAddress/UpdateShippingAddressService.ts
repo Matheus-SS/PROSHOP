@@ -54,9 +54,14 @@ class UpdateShippingAddressService {
       shippingAddress
     );
 
-    const newUpdatedShippingAddress = updatedShippingAddress.toObject();
-
-    delete newUpdatedShippingAddress.user.password;
+    const newUpdatedShippingAddress = updatedShippingAddress.toObject<IShippingAddressDocument>(
+      {
+        transform: (doc, ret) => {
+          delete ret.user?.password;
+          return ret;
+        },
+      }
+    );
 
     return newUpdatedShippingAddress;
   }

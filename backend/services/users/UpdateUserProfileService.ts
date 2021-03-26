@@ -70,7 +70,7 @@ class UpdateUserProfileService {
 
     // updates the info from user in table shipping Address when user updates
     if (shippingAddress) {
-      const newUpdatedUser = updatedUser.toObject();
+      const newUpdatedUser = updatedUser.toObject<IUserDocument>();
       shippingAddress.user = newUpdatedUser;
 
       await this.shippingAddressRepository.save(shippingAddress);

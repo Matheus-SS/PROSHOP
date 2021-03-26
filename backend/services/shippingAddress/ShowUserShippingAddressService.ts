@@ -1,4 +1,7 @@
-import { IShippingAddressDocument } from '../../models/ShippingAddressModel';
+import {
+  IShippingAddressDocument,
+  IShippingAddress,
+} from '../../models/ShippingAddressModel';
 import { IShippingAddressRepository } from '../../repositories/shippingAddressRepository';
 import { IUsersRepository } from '../../repositories/userRepository';
 
@@ -31,9 +34,14 @@ class ShowUserShippingAddressService {
       );
     }
 
-    const newShippingAddress = shippingAddress.toObject();
-
-    delete newShippingAddress.user.password;
+    const newShippingAddress = shippingAddress.toObject<IShippingAddressDocument>(
+      {
+        transform: (doc, ret) => {
+          delete ret.user?.password;
+          return ret;
+        },
+      }
+    );
 
     return newShippingAddress;
   }
