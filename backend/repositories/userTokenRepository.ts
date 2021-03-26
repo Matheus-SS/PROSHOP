@@ -11,7 +11,7 @@ export interface IUsersTokenRepository {
   findByToken(token: string): Promise<IUserTokenDocument | null>;
 }
 
-class UsersRepository implements IUsersTokenRepository {
+class UsersTokenRepository implements IUsersTokenRepository {
   private userToken: Model<IUserTokenDocument>;
 
   constructor() {
@@ -38,4 +38,4 @@ class UsersRepository implements IUsersTokenRepository {
   }
 }
 
-export default UsersRepository;
+export default UsersTokenRepository;

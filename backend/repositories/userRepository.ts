@@ -1,3 +1,4 @@
+import { ObjectID } from 'mongodb';
 import { Model } from 'mongoose';
 import { IUserDocument } from '../models/UserModel';
 
@@ -12,7 +13,7 @@ export interface ICreateUserDTO {
 export interface IUsersRepository {
   create(userData: ICreateUserDTO): Promise<IUserDocument>;
   findByEmail(email: string): Promise<IUserDocument | null>;
-  findById(id: string): Promise<IUserDocument | null>;
+  findById(id: string | ObjectID): Promise<IUserDocument | null>;
   save(user: IUserDocument): Promise<IUserDocument>;
 }
 
@@ -35,7 +36,7 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async findById(id: string): Promise<IUserDocument | null> {
+  public async findById(id: string | ObjectID): Promise<IUserDocument | null> {
     const user = await this.user.findById(id);
 
     return user;
