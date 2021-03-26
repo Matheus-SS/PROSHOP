@@ -5,6 +5,9 @@
   "repository": "https://github.com/Matheus-SS/PROSHOP.git",
   "author": "Matheus Santos <matheus_sa_santos@hotmail.com>",
   "license": "MIT",
+  "engines": {
+    "node": "14.6.0"
+  },
   "scripts": {
     "start": "node dist/backend/server.js",
     "server": "tsnd --files backend/server.ts",
