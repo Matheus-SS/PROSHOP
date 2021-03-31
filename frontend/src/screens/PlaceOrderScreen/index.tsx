@@ -1,17 +1,20 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAddressInformation } from '../../store/modules/shippingAddress/ShippingAddressAction';
+import { IShippingAddress } from '../../store/modules/shippingAddress/types/ShippingAddressTypes';
+import { createOrder } from '../../store/modules/order/OrderAction';
 
 import CheckoutSteps from '../../components/CheckoutSteps';
-
 import Message from '../../components/Message';
 
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
   useEffect(() => {
     dispatch(getAddressInformation());
   }, [dispatch]);
@@ -22,15 +25,25 @@ const PlaceOrderScreen = () => {
     (state: RootStore) => state.shippingAddressInformation
   );
 
+  let shipping: IShippingAddress;
+
+  if (shippingAddressInfo) {
+    shipping = {
+      city: shippingAddressInfo.city,
+      country: shippingAddressInfo.country,
+      postalCode: shippingAddressInfo.postalCode,
+      address: shippingAddressInfo.address,
+    };
+  }
+
   // Calculate price
 
   const addDecimals = (num: number) => {
     return (Math.round(num * 100) / 100).toFixed(2);
   };
+
   const totalPriceEachItem = useMemo(() => {
-    const sub = cart.cartItems.map(
-      (item) => item.product_price * item.product_quantity
-    );
+    const sub = cart.cartItems.map((item) => item.price * item.quantity);
     return sub;
   }, [cart.cartItems]);
 
@@ -38,7 +51,7 @@ const PlaceOrderScreen = () => {
     const total = addDecimals(
       cart.cartItems.reduce(
         (accumulator, cartItem) =>
-          accumulator + cartItem.product_quantity * cartItem.product_price,
+          accumulator + cartItem.quantity * cartItem.price,
         0
       )
     );
@@ -58,7 +71,37 @@ const PlaceOrderScreen = () => {
     Number(taxPrice)
   ).toFixed(2);
 
-  const placeOrderHandler = useCallback(() => {}, []);
+  const orderCreate = useSelector((state: RootStore) => state.orderCreate);
+  const { order, success, error } = orderCreate;
+
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order?._id}`);
+    }
+  }, [history, success, order]);
+
+  const placeOrderHandler = useCallback(() => {
+    dispatch(
+      createOrder({
+        orderItems: cart.cartItems,
+        shippingAddress: shipping,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: Number(totalPriceAllItens),
+        shippingPrice: Number(shippingPrice),
+        taxPrice: Number(taxPrice),
+        totalPrice: Number(carTotalPrice),
+      })
+    );
+  }, [
+    cart.cartItems,
+    shippingAddressInfo,
+    carTotalPrice,
+    cart.paymentMethod,
+    dispatch,
+    shippingPrice,
+    taxPrice,
+    totalPriceAllItens,
+  ]);
   return (
     <>
       <CheckoutSteps step1 step2 step3 step4 />
@@ -95,24 +138,24 @@ const PlaceOrderScreen = () => {
               ) : (
                 <ListGroup variant="flush">
                   {cart.cartItems.map((item, index) => (
-                    <ListGroup.Item key={item.product_id}>
+                    <ListGroup.Item key={item.product}>
                       <Row>
                         <Col md={2}>
                           <Image
-                            src={item.product_image}
-                            alt={item.product_name}
+                            src={item.image}
+                            alt={item.name}
                             fluid
                             rounded
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product_id}`}>
-                            {item.product_name}
+                          <Link to={`/product/${item.product}`}>
+                            {item.name}
                           </Link>
                         </Col>
 
                         <Col md={4}>
-                          {item.product_quantity} x {item.product_price} = ${' '}
+                          {item.quantity} x {item.price} = ${' '}
                           {totalPriceEachItem[index]}
                         </Col>
                       </Row>
@@ -156,6 +199,10 @@ const PlaceOrderScreen = () => {
                   <Col>Total</Col>
                   <Col>$ {carTotalPrice}</Col>
                 </Row>
+              </ListGroup.Item>
+
+              <ListGroup.Item>
+                {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>
 
               <ListGroup.Item>

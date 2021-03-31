@@ -18,7 +18,12 @@ interface IPaymentResult {
 export interface IOrder {
   user: Types.ObjectId;
   orderItems: IOrderItems[];
-  shippingAddress: Types.ObjectId;
+  shippingAddress: {
+    city: string;
+    address: string;
+    postalCode: string;
+    country: string;
+  };
   paymentMethod: string;
   paymentResult?: IPaymentResult;
   taxPrice: number;
@@ -55,9 +60,10 @@ const OrderSchema = new mongoose.Schema(
       },
     ],
     shippingAddress: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'ShippingAddress',
+      address: { type: String, required: true },
+      city: { type: String, required: true },
+      postalCode: { type: String, required: true },
+      country: { type: String, required: true },
     },
     paymentMethod: {
       type: String,

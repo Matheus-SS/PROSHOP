@@ -13,12 +13,12 @@ export const CART_SAVE_PAYMENT_METHOD_SUCCESS =
 export const CART_SAVE_PAYMENT_METHOD_FAIL = 'CART_SAVE_PAYMENT_METHOD_FAIL';
 
 export interface ICart {
-  product_id: string;
-  product_name: string;
-  product_image: string;
-  product_price: number;
-  product_countInStock: number;
-  product_quantity: number;
+  product: string;
+  name: string;
+  image: string;
+  price: number;
+  countInStock: number;
+  quantity: number;
 }
 
 // State types of the reducer CART

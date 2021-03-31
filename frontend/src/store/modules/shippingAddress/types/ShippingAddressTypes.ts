@@ -30,7 +30,7 @@ export interface IShippingAddress {
   country: string;
 }
 
-// State types of the user
+// State types of the shippingAddres
 export interface IShippingAddressState {
   readonly shippingAddressInfo: IShippingAddress | null;
   readonly loading: boolean;

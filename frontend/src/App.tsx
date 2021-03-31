@@ -15,6 +15,7 @@ import ResetPasswordScreen from './screens/ResetPasswordScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import OrderScreen from './screens/OrderScreen';
 
 import PageNotFound from './screens/PageNotFound';
 
@@ -26,6 +27,7 @@ const App = () => {
         <Container>
           <Switch>
             <Route exact path="/" component={HomeScreen} />
+            <Route path="/order/:id" component={OrderScreen} />
             <Route path="/placeorder" component={PlaceOrderScreen} />
             <Route path="/payment" component={PaymentScreen} />
             <Route path="/reset-password" component={ResetPasswordScreen} />

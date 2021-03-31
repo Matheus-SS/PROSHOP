@@ -31,17 +31,17 @@ const cartReducer: Reducer<ICartState> = (
       const item = action.payload;
 
       const existItem = state.cartItems.find(
-        (cartItem) => cartItem.product_id === item.product_id
+        (cartItem) => cartItem.product === item.product
       );
 
       if (existItem) {
         return {
           ...state,
           cartItems: state.cartItems.map((cartItem) =>
-            cartItem.product_id === existItem.product_id
+            cartItem.product === existItem.product
               ? {
                   ...cartItem,
-                  product_quantity: item.product_quantity,
+                  quantity: item.quantity,
                 }
               : { ...cartItem }
           ),
@@ -66,7 +66,7 @@ const cartReducer: Reducer<ICartState> = (
       return {
         ...state,
         cartItems: state.cartItems.filter(
-          (cartItem) => cartItem.product_id !== action.payload
+          (cartItem) => cartItem.product !== action.payload
         ),
       };
 

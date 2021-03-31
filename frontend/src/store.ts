@@ -11,6 +11,8 @@ import UpdateProfileUserReducer from './store/modules/user/reducers/UpdateProfil
 import DetailsShippingAddressReducer from './store/modules/shippingAddress/reducers/DetailsShippingAddressReducer';
 import RegisterShippingAddressReducer from './store/modules/shippingAddress/reducers/RegisterShippingAddressReducer';
 import UpdateShippingAddressReducer from './store/modules/shippingAddress/reducers/UpdateShippingAddressReducer';
+import OrderCreateReducer from './store/modules/order/reducers/CreateOrderReducer';
+import OrderDetailsReducer from './store/modules/order/reducers/GetOrderByIdReducer';
 
 import { ICart } from './store/modules/cart/types/CartTypes';
 import { IUser } from './store/modules/user/types/UserTypes';
@@ -26,6 +28,8 @@ const rootReducer = combineReducers({
   shippingAddressInformation: DetailsShippingAddressReducer,
   registerShippingAddress: RegisterShippingAddressReducer,
   updatedShippingAddress: UpdateShippingAddressReducer,
+  orderCreate: OrderCreateReducer,
+  orderDetails: OrderDetailsReducer,
 });
 
 const cartItems = localStorage.getItem('@ProShop:cartItems');

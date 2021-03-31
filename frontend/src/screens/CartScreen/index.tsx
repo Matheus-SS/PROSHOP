@@ -27,7 +27,7 @@ const CartScreen = () => {
 
   const totalItemsInCart = useMemo(() => {
     const items = cartItems.reduce(
-      (accumulator, cartItem) => accumulator + cartItem.product_quantity,
+      (accumulator, cartItem) => accumulator + cartItem.quantity,
       0
     );
     return items;
@@ -37,7 +37,7 @@ const CartScreen = () => {
     const total = cartItems
       .reduce(
         (accumulator, cartItem) =>
-          accumulator + cartItem.product_quantity * cartItem.product_price,
+          accumulator + cartItem.quantity * cartItem.price,
         0
       )
       .toFixed(2);
@@ -64,33 +64,33 @@ const CartScreen = () => {
         ) : (
           <ListGroup variant="flush">
             {cartItems.map((cartItem) => (
-              <ListGroup.Item key={cartItem.product_id}>
+              <ListGroup.Item key={cartItem.product}>
                 <Row>
                   <Col md={2}>
                     <Image
-                      src={cartItem.product_image}
-                      alt={cartItem.product_name}
+                      src={cartItem.image}
+                      alt={cartItem.name}
                       fluid
                       rounded
                     />
                   </Col>
                   <Col md={3}>
-                    <Link to={`/product/${cartItem.product_id}`}>
-                      {cartItem.product_name}
+                    <Link to={`/product/${cartItem.product}`}>
+                      {cartItem.name}
                     </Link>
                   </Col>
-                  <Col md={2}>${cartItem.product_price}</Col>
+                  <Col md={2}>${cartItem.price}</Col>
                   <Col md={2}>
                     <Form.Control
                       as="select"
-                      value={cartItem.product_quantity}
+                      value={cartItem.quantity}
                       onChange={(e) =>
                         dispatch(
-                          addToCart(cartItem.product_id, Number(e.target.value))
+                          addToCart(cartItem.product, Number(e.target.value))
                         )
                       }
                     >
-                      {arrayFromCountInStock(cartItem.product_countInStock).map(
+                      {arrayFromCountInStock(cartItem.countInStock).map(
                         (value) => (
                           <option key={value} value={value}>
                             {value}
@@ -103,7 +103,7 @@ const CartScreen = () => {
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => removeFromCartHandler(cartItem.product_id)}
+                      onClick={() => removeFromCartHandler(cartItem.product)}
                     >
                       <i className="fas fa-trash-alt"></i>
                     </Button>
