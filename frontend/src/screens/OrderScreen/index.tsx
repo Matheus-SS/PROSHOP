@@ -1,22 +1,39 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
+
+import { PayPalButton } from 'react-paypal-button-v2';
+
 import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAddressInformation } from '../../store/modules/shippingAddress/ShippingAddressAction';
-import { getOrderDetails } from '../../store/modules/order/OrderAction';
+import {
+  getOrderDetails,
+  payOrder,
+} from '../../store/modules/order/OrderAction';
+import {
+  ORDER_PAY_RESET,
+  IPaymentResult,
+} from '../../store/modules/order/types/OrderType';
 
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
+import format from 'date-fns/format';
 
 type UrlParams = { id: string };
 
 const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
   const dispatch = useDispatch();
 
+  const [sdkReady, setSdkReady] = useState<boolean>(false);
+
   const orderDetails = useSelector((state: RootStore) => state.orderDetails);
   const { order, loading, error } = orderDetails;
+
+  const orderPay = useSelector((state: RootStore) => state.orderPay);
+  const { loading: loadingPay, success: successPay } = orderPay;
 
   const addDecimals = (num: number) => {
     return (Math.round(num * 100) / 100).toFixed(2);
@@ -32,9 +49,45 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
     );
   }
 
+  function FormatDate(date: Date | undefined) {
+    if (date) {
+      return format(new Date(date), 'dd/MM/yyyy');
+    }
+  }
+
   useEffect(() => {
-    dispatch(getOrderDetails(match.params.id));
-  }, [dispatch, match.params.id]);
+    const addPaypalScript = async () => {
+      const { data: clientId } = await axios.get('/api/config/paypal');
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+      script.async = true;
+
+      script.onload = () => {
+        setSdkReady(true);
+      };
+
+      document.body.appendChild(script);
+    };
+
+    if (!order || successPay) {
+      dispatch({ type: ORDER_PAY_RESET });
+      dispatch(getOrderDetails(match.params.id));
+    }
+
+    if (!order?.isPaid) {
+      if ((window as any).paypal === undefined) {
+        addPaypalScript();
+      } else {
+        setSdkReady(true);
+      }
+    }
+  }, [dispatch, match.params.id, successPay]);
+
+  const successPaymentHandler = (paymentResult: IPaymentResult) => {
+    console.log(paymentResult);
+    dispatch(payOrder(match.params.id, paymentResult));
+  };
 
   return loading ? (
     <Loader />
@@ -45,6 +98,7 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
       <Row>
         <Col md={8}>
           <ListGroup variant="flush">
+            <h1>ORDER: {order?._id} </h1>
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
@@ -69,7 +123,7 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
               </p>
               {order?.isDelivered ? (
                 <Message variant="success">
-                  Delivered on {order?.isDelivered}
+                  Delivered on {FormatDate(order?.deliveredAt)}
                 </Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
@@ -83,7 +137,9 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
                 {order?.paymentMethod}
               </p>
               {order?.isPaid ? (
-                <Message variant="success">Paid on {order?.paidAt}</Message>
+                <Message variant="success">
+                  Paid on {FormatDate(order?.paidAt)}
+                </Message>
               ) : (
                 <Message variant="danger">Not paid</Message>
               )}
@@ -159,6 +215,19 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
                   <Col>$ {order?.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              {!order?.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {!sdkReady ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButton
+                      amount={order?.totalPrice}
+                      onSuccess={successPaymentHandler}
+                    />
+                  )}
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>

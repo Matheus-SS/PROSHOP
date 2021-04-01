@@ -58,3 +58,40 @@ export const getOrderById = asyncHandler(
     }
   }
 );
+
+//@desc update order
+//@route UPDATE /api/orders/:id/pay
+//@access Private
+export const updateOrderToPaid = asyncHandler(
+  async (request: Request, response: Response) => {
+    const order = await Order.findById(request.params.id);
+
+    if (order) {
+      order.isPaid = true;
+      (order.paidAt = new Date()),
+        (order.paymentResult = {
+          id: request.body.id,
+          status: request.body.status,
+          update_time: request.body.update_time,
+          email_address: request.body.payer.email_address,
+        });
+
+      const updatedOrder = await order.save();
+      return response.json(updatedOrder);
+    } else {
+      response.status(404);
+      throw new Error('Order not found');
+    }
+  }
+);
+
+//@desc Get logged in user orders
+//@route GET /api/orders/myorders
+//@access Private
+export const getMyOrders = asyncHandler(
+  async (request: Request, response: Response) => {
+    const orders = await Order.find({ user: request.userId });
+
+    response.json(orders);
+  }
+);

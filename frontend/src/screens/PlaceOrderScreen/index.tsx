@@ -10,6 +10,7 @@ import { createOrder } from '../../store/modules/order/OrderAction';
 
 import CheckoutSteps from '../../components/CheckoutSteps';
 import Message from '../../components/Message';
+import format from 'date-fns/format';
 
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
@@ -94,7 +95,6 @@ const PlaceOrderScreen = () => {
     );
   }, [
     cart.cartItems,
-    shippingAddressInfo,
     carTotalPrice,
     cart.paymentMethod,
     dispatch,

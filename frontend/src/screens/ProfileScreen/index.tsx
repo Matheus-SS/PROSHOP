@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Form, Button, Row, Col } from 'react-bootstrap';
-
+import { Form, Button, Row, Col, Table } from 'react-bootstrap';
+import { format } from 'date-fns';
 import { RootStore } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -9,9 +9,11 @@ import {
   updateUserProfile,
 } from '../../store/modules/user/UserAction';
 import { USER_UPDATE_PROFILE_REMOVE } from '../../store/modules/user/types/UserTypes';
+import { orderListMe } from '../../store/modules/order/OrderAction';
 
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
+import { LinkContainer } from 'react-router-bootstrap';
 
 const ProfileScreen = () => {
   const [name, setName] = useState<string>('');
@@ -42,16 +44,27 @@ const ProfileScreen = () => {
 
   const { success, error } = userUpdateProfile;
 
+  const MeOrderList = useSelector((state: RootStore) => {
+    return state.orderListMe;
+  });
+
+  const { loading: loadingOrders, error: errorOrders, order } = MeOrderList;
+
   useEffect(() => {
     if (!userLoginInfo) {
       history.push('/');
     }
   }, [history, userLoginInfo]);
 
+  useEffect(() => {
+    dispatch(orderListMe());
+  }, []);
+
   //useeffect that controls the info of the profile form
   useEffect(() => {
     if (!userInfo || success) {
       dispatch(getUserDetails('profile'));
+
       dispatch({ type: USER_UPDATE_PROFILE_REMOVE });
     } else {
       setName(userInfo.name);
@@ -92,6 +105,12 @@ const ProfileScreen = () => {
       return () => clearTimeout(timer);
     }
   }, [dispatch, success, successUpdate, error, errorUpdate, message]);
+
+  function FormatDate(date: Date | undefined) {
+    if (date) {
+      return format(new Date(date), 'dd/MM/yyyy');
+    }
+  }
 
   const submitHandler = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -162,7 +181,57 @@ const ProfileScreen = () => {
         </Form>
       </Col>
 
-      <Col md={9}></Col>
+      <Col md={9}>
+        <h2>My Orders</h2>
+        {loadingOrders ? (
+          <Loader />
+        ) : errorOrders ? (
+          <Message variant="danger">{errorOrders}</Message>
+        ) : (
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {order?.map((ord) => (
+                <tr key={ord._id}>
+                  <td>{ord._id}</td>
+                  <td>{FormatDate(ord.createdAt)}</td>
+                  <td>{ord.totalPrice}</td>
+                  <td>
+                    {ord.isPaid ? (
+                      FormatDate(ord.paidAt)
+                    ) : (
+                      <i className="fas fa-times" style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>
+                    {ord.isDelivered ? (
+                      FormatDate(ord.deliveredAt)
+                    ) : (
+                      <i className="fas fa-times" style={{ color: 'red' }}></i>
+                    )}
+                  </td>
+                  <td>
+                    <LinkContainer to={`/order/${ord._id}`}>
+                      <Button className="btn-sm" variant="light">
+                        Details
+                      </Button>
+                    </LinkContainer>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
+      </Col>
     </Row>
   );
 };

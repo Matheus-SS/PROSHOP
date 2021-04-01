@@ -31,6 +31,12 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+// PAYPAL
+
+app.get('/api/config/paypal', (request: Request, response: Response) => {
+  response.send(process.env.PAYPAL_CLIENT_ID);
+});
+
 // handling with status error 404
 app.use(notFound);
 
