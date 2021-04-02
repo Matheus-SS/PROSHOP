@@ -9,6 +9,7 @@ import Order from './models/OrderModel';
 import { Review } from './models/ReviewModel';
 import connectDB from './config/database';
 
+('ADMINUSERLIST');
 connectDB();
 
 const importData = async () => {
