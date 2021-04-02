@@ -8,6 +8,7 @@ import CreateUserService from '../services/users/CreateUserService';
 import ShowUserProfileService from '../services/users/ShowUserProfileService';
 import AuthenticateUserService from '../services/users/AuthenticateUserService';
 import UpdateUserProfileService from '../services/users/UpdateUserProfileService';
+import User from '../models/UserModel';
 
 export default class UserController {
   // // @desc       Register a new user
@@ -109,5 +110,17 @@ export default class UserController {
       isAdmin: updatedUser.isAdmin,
       token: token,
     });
+  }
+
+  // @desc       Get user profile
+  // @route      GET /api/users
+  // @access     Private/Admin
+  public async getUsers(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const users = await User.find({});
+
+    return response.status(200).json(users);
   }
 }

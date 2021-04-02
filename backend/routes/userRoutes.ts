@@ -17,4 +17,6 @@ userRouter.put(
   asyncHandler(userController.updateUserProfile)
 );
 
+userRouter.get('/', protect, asyncHandler(userController.getUsers));
+
 export default userRouter;
