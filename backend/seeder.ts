@@ -10,6 +10,7 @@ import { Review } from './models/ReviewModel';
 import connectDB from './config/database';
 
 ('ADMIN MIDDLEWARE');
+('ADMINUSERLIST');
 connectDB();
 
 const importData = async () => {
