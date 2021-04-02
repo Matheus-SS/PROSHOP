@@ -57,6 +57,7 @@ Bibliotecas utilizadas até o momento:
 - [x] Models
 - [x] Error Middleware
 - [x] Authentication Middleware
+- [ ] Admin Middleware
 - [x] Routes
 - [ ] Services
 - [ ] Testing
