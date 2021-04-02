@@ -1,7 +1,7 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
 import UserController from '../controllers/UserController';
-import { protect } from '../middleware/AuthenticationMiddleware';
+import { protect, admin } from '../middleware/AuthenticationMiddleware';
 const userRouter = express.Router();
 const userController = new UserController();
 userRouter.post('/', asyncHandler(userController.createUser));
@@ -17,6 +17,6 @@ userRouter.put(
   asyncHandler(userController.updateUserProfile)
 );
 
-userRouter.get('/', protect, asyncHandler(userController.getUsers));
+userRouter.get('/', protect, admin, userController.getUsers);
 
 export default userRouter;

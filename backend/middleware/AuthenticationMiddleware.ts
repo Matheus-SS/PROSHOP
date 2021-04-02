@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import AsyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
+import UsersRepository from '../repositories/userRepository';
 
 interface ITokenPayload {
   id: string;
@@ -35,6 +36,19 @@ export const protect = AsyncHandler(
     if (!token) {
       response.status(401);
       throw new Error('Not authorized, no token');
+    }
+  }
+);
+
+export const admin = AsyncHandler(
+  async (request: Request, response: Response, next: NextFunction) => {
+    const user = await new UsersRepository().findById(request.userId);
+
+    if (user && user.isAdmin) {
+      next();
+    } else {
+      response.status(401);
+      throw new Error('Not authorized as an admin');
     }
   }
 );

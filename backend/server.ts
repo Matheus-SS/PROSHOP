@@ -7,6 +7,7 @@ import connectDB from './config/database';
 import path from 'path';
 import routes from './routes';
 import './controllers/ProductController';
+import { admin } from './middleware/AuthenticationMiddleware';
 connectDB();
 
 const app = express();
