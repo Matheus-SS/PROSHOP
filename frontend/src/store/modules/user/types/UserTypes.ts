@@ -22,6 +22,7 @@ export const USER_UPDATE_PROFILE_REMOVE = 'USER_UPDATE_PROFILE_REMOVE';
 export const USER_LIST_REQUEST = 'USER_LIST_REQUEST';
 export const USER_LIST_SUCCESS = 'USER_LIST_SUCCESS';
 export const USER_LIST_FAIL = 'USER_LIST_FAIL';
+export const USER_LIST_REMOVE = 'USER_LIST_REMOVE';
 
 export interface IUser {
   _id: string;
@@ -132,6 +133,10 @@ export interface IUserListRequest {
   type: typeof USER_LIST_REQUEST;
 }
 
+export interface IUserListRemove {
+  type: typeof USER_LIST_REMOVE;
+}
+
 export type UserDispatchTypes =
   | IUserLoginRequest
   | IUserLoginFail
@@ -151,4 +156,5 @@ export type UserDispatchTypes =
   | IUserUpdateProfileRemove
   | IUserListRequest
   | IUserListSuccess
-  | IUserListFail;
+  | IUserListFail
+  | IUserListRemove;

@@ -5,6 +5,7 @@ import {
   USER_LIST_REQUEST,
   USER_LIST_FAIL,
   IUserStateList,
+  USER_LIST_REMOVE,
 } from '../types/UserTypes';
 
 const INITIAL_STATE: IUserStateList = {
@@ -35,6 +36,12 @@ const userListReducer: Reducer<IUserStateList> = (
         users: [],
         loading: false,
         error: action.payload,
+      };
+    case USER_LIST_REMOVE:
+      return {
+        users: [],
+        loading: false,
+        error: '',
       };
     default:
       return state;

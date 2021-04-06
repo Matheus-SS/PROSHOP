@@ -22,6 +22,7 @@ import {
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
   USER_LIST_FAIL,
+  USER_LIST_REMOVE,
 } from './types/UserTypes';
 
 import {
@@ -72,11 +73,15 @@ export const logout = () => async (
   dispatch: Dispatch<UserDispatchTypes | ShippingAddressDispatchTypes>
 ) => {
   localStorage.removeItem('@ProShop:userInfo');
+  localStorage.removeItem('@ProShop:paymentMethod');
+  localStorage.removeItem('@ProShop:cartItems');
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_REGISTER_REMOVE });
   dispatch({ type: USER_DETAILS_REMOVE });
   dispatch({ type: USER_UPDATE_PROFILE_REMOVE });
   dispatch({ type: SHIPPING_ADDRESS_INFORMATION_REMOVE });
+  dispatch({ type: USER_LIST_REMOVE });
+  document.location.href = '/login';
 };
 
 // this async is because is using redux thunk

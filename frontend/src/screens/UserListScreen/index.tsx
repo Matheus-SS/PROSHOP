@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -11,15 +11,29 @@ import Loader from '../../components/Loader';
 
 const UserListScreen = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
   const userList = useSelector((state: RootStore) => state.userList);
   const { loading, error, users } = userList;
+
+  const userLogin = useSelector((state: RootStore) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const deleteHandler = (id: string) => {
     console.log('deleted');
   };
   useEffect(() => {
-    dispatch(listUsers());
+    if (userInfo && userInfo.isAdmin) {
+      dispatch(listUsers());
+    }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!userInfo) {
+      console.log('reste');
+    }
+  }, [dispatch]);
+
   return (
     <>
       <h1> Users</h1>
