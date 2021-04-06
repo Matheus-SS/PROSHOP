@@ -28,12 +28,6 @@ const UserListScreen = () => {
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!userInfo) {
-      console.log('reste');
-    }
-  }, [dispatch]);
-
   return (
     <>
       <h1> Users</h1>
