@@ -19,6 +19,10 @@ export const USER_UPDATE_PROFILE_SUCCESS = 'USER_UPDATE_PROFILE_SUCCESS';
 export const USER_UPDATE_PROFILE_FAIL = 'USER_UPDATE_PROFILE_FAIL';
 export const USER_UPDATE_PROFILE_REMOVE = 'USER_UPDATE_PROFILE_REMOVE';
 
+export const USER_LIST_REQUEST = 'USER_LIST_REQUEST';
+export const USER_LIST_SUCCESS = 'USER_LIST_SUCCESS';
+export const USER_LIST_FAIL = 'USER_LIST_FAIL';
+
 export interface IUser {
   _id: string;
   name: string;
@@ -30,6 +34,13 @@ export interface IUser {
 // State types of the user
 export interface IUserState {
   readonly userInfo: IUser | null;
+  readonly loading: boolean;
+  readonly error: string;
+  readonly success?: boolean;
+}
+
+export interface IUserStateList {
+  readonly users: IUser[];
   readonly loading: boolean;
   readonly error: string;
   readonly success?: boolean;
@@ -107,6 +118,20 @@ export interface IUserUpdateProfileRemove {
   type: typeof USER_UPDATE_PROFILE_REMOVE;
 }
 
+export interface IUserListSuccess {
+  type: typeof USER_LIST_SUCCESS;
+  payload: IUser[];
+}
+
+export interface IUserListFail {
+  type: typeof USER_LIST_FAIL;
+  payload: string;
+}
+
+export interface IUserListRequest {
+  type: typeof USER_LIST_REQUEST;
+}
+
 export type UserDispatchTypes =
   | IUserLoginRequest
   | IUserLoginFail
@@ -123,4 +148,7 @@ export type UserDispatchTypes =
   | IUserUpdateProfileRequest
   | IUserUpdateProfileSuccess
   | IUserUpdateProfileFail
-  | IUserUpdateProfileRemove;
+  | IUserUpdateProfileRemove
+  | IUserListRequest
+  | IUserListSuccess
+  | IUserListFail;
