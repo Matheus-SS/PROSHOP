@@ -24,6 +24,10 @@ export const USER_LIST_SUCCESS = 'USER_LIST_SUCCESS';
 export const USER_LIST_FAIL = 'USER_LIST_FAIL';
 export const USER_LIST_REMOVE = 'USER_LIST_REMOVE';
 
+export const USER_DELETE_REQUEST = 'USER_DELETE_REQUEST';
+export const USER_DELETE_SUCCESS = 'USER_DELETE_SUCCESS';
+export const USER_DELETE_FAIL = 'USER_DELETE_FAIL';
+
 export interface IUser {
   _id: string;
   name: string;
@@ -137,6 +141,19 @@ export interface IUserListRemove {
   type: typeof USER_LIST_REMOVE;
 }
 
+export interface IUserDeleteSuccess {
+  type: typeof USER_DELETE_SUCCESS;
+}
+
+export interface IUserDeleteFail {
+  type: typeof USER_DELETE_FAIL;
+  payload: string;
+}
+
+export interface IUserDeleteRequest {
+  type: typeof USER_DELETE_REQUEST;
+}
+
 export type UserDispatchTypes =
   | IUserLoginRequest
   | IUserLoginFail
@@ -157,4 +174,7 @@ export type UserDispatchTypes =
   | IUserListRequest
   | IUserListSuccess
   | IUserListFail
-  | IUserListRemove;
+  | IUserListRemove
+  | IUserDeleteSuccess
+  | IUserDeleteRequest
+  | IUserDeleteFail;

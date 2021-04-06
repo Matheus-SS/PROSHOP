@@ -9,6 +9,7 @@ import RegisterUserReducer from './store/modules/user/reducers/RegisterUserReduc
 import DetailsUserReducer from './store/modules/user/reducers/DetailsUserReducer';
 import UpdateProfileUserReducer from './store/modules/user/reducers/UpdateProfileUserReducer';
 import UserListReducer from './store/modules/user/reducers/UserListReducer';
+import UserDeleteReducer from './store/modules/user/reducers/UserDeleteReducer';
 
 import DetailsShippingAddressReducer from './store/modules/shippingAddress/reducers/DetailsShippingAddressReducer';
 import RegisterShippingAddressReducer from './store/modules/shippingAddress/reducers/RegisterShippingAddressReducer';
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   userDetails: DetailsUserReducer,
   userUpdateProfile: UpdateProfileUserReducer,
   userList: UserListReducer,
+  userDelete: UserDeleteReducer,
   shippingAddressInformation: DetailsShippingAddressReducer,
   registerShippingAddress: RegisterShippingAddressReducer,
   updatedShippingAddress: UpdateShippingAddressReducer,
