@@ -16,6 +16,7 @@ import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import PlaceOrderScreen from './screens/PlaceOrderScreen';
 import OrderScreen from './screens/OrderScreen';
+import UserListScreen from './screens/UserListScreen';
 
 import PageNotFound from './screens/PageNotFound';
 
@@ -37,6 +38,8 @@ const App = () => {
             <Route path="/profile" component={ProfileScreen} />
             <Route path="/product/:id" component={ProductScreen} />
             <Route path="/cart" component={CartScreen} />
+            <Route path="/admin/userList" component={UserListScreen} />
+
             <Route path="/shipping" component={ShippingScreen} />
 
             <Route
