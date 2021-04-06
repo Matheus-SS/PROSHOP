@@ -58,7 +58,7 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     dispatch(orderListMe());
-  }, []);
+  }, [dispatch]);
 
   //useeffect that controls the info of the profile form
   useEffect(() => {

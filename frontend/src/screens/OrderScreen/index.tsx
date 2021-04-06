@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { PayPalButton } from 'react-paypal-button-v2';
 
-import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAddressInformation } from '../../store/modules/shippingAddress/ShippingAddressAction';
 import {
   getOrderDetails,
   payOrder,
@@ -82,7 +81,7 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, match.params.id, successPay]);
+  }, [dispatch, match.params.id, successPay, order]);
 
   const successPaymentHandler = (paymentResult: IPaymentResult) => {
     console.log(paymentResult);
