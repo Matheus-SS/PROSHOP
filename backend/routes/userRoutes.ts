@@ -18,5 +18,6 @@ userRouter.put(
 );
 
 userRouter.get('/', protect, admin, userController.getUsers);
+userRouter.delete('/:id', protect, admin, userController.deleteUser);
 
 export default userRouter;

@@ -112,7 +112,7 @@ export default class UserController {
     });
   }
 
-  // @desc       Get user profile
+  // @desc       Get users
   // @route      GET /api/users
   // @access     Private/Admin
   public async getUsers(
@@ -122,5 +122,23 @@ export default class UserController {
     const users = await User.find({});
 
     return response.status(200).json(users);
+  }
+
+  // @desc       Delete user
+  // @route      DELETE /api/users/:id
+  // @access     Private/Admin
+  public async deleteUser(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const user = await User.findById(request.params.id);
+
+    if (user) {
+      await user.remove();
+      return response.json({ message: 'User removed' });
+    } else {
+      response.status(404);
+      throw new Error('User not found');
+    }
   }
 }
