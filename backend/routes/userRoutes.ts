@@ -18,6 +18,14 @@ userRouter.put(
 );
 
 userRouter.get('/', protect, admin, userController.getUsers);
+userRouter.get(
+  '/:id',
+  protect,
+  admin,
+  asyncHandler(userController.getUserById)
+);
+userRouter.put('/:id', protect, admin, asyncHandler(userController.updateUser));
+
 userRouter.delete('/:id', protect, admin, userController.deleteUser);
 
 export default userRouter;

@@ -141,4 +141,50 @@ export default class UserController {
       throw new Error('User not found');
     }
   }
+
+  // @desc       Get user by ID
+  // @route      GET /api/users/:id
+  // @access     Private/Admin
+  public async getUserById(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const user = await User.findById(request.params.id).select('-password');
+
+    if (user) {
+      return response.status(200).json(user);
+    } else {
+      response.status(404);
+      throw new Error('User not found');
+    }
+  }
+
+  // @desc       Update user
+  // @route      PUT /api/users/:id
+  // @access     Private/Admin
+  public async updateUser(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const user = await User.findById(request.params.id);
+
+    if (user) {
+      user.name = request.body.name || user.name;
+      user.email = request.body.email || user.email;
+
+      user.isAdmin = request.body.isAdmin;
+
+      const updatedUser = await user.save();
+
+      return response.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+      });
+    } else {
+      response.status(404);
+      throw new Error('User not found');
+    }
+  }
 }
