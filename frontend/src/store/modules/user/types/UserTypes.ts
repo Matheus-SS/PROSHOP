@@ -1,3 +1,5 @@
+import { Omit } from 'react-redux';
+
 export const USER_LOGIN_REQUEST = 'USER_LOGIN_REQUEST';
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
 export const USER_LOGIN_FAIL = 'USER_LOGIN_FAIL';
@@ -27,6 +29,11 @@ export const USER_LIST_REMOVE = 'USER_LIST_REMOVE';
 export const USER_DELETE_REQUEST = 'USER_DELETE_REQUEST';
 export const USER_DELETE_SUCCESS = 'USER_DELETE_SUCCESS';
 export const USER_DELETE_FAIL = 'USER_DELETE_FAIL';
+
+export const USER_UPDATE_REQUEST = 'USER_UPDATE_REQUEST';
+export const USER_UPDATE_SUCCESS = 'USER_UPDATE_SUCCESS';
+export const USER_UPDATE_FAIL = 'USER_UPDATE_FAIL';
+export const USER_UPDATE_REMOVE = 'USER_UPDATE_PROFILE_REMOVE';
 
 export interface IUser {
   _id: string;
@@ -154,6 +161,23 @@ export interface IUserDeleteRequest {
   type: typeof USER_DELETE_REQUEST;
 }
 
+export interface IUserUpdateRequest {
+  type: typeof USER_UPDATE_REQUEST;
+}
+
+export interface IUserUpdateSuccess {
+  type: typeof USER_UPDATE_SUCCESS;
+}
+
+export interface IUserUpdateFail {
+  type: typeof USER_UPDATE_FAIL;
+  payload: string;
+}
+
+export interface IUserUpdateRemove {
+  type: typeof USER_UPDATE_REMOVE;
+}
+
 export type UserDispatchTypes =
   | IUserLoginRequest
   | IUserLoginFail
@@ -177,4 +201,8 @@ export type UserDispatchTypes =
   | IUserListRemove
   | IUserDeleteSuccess
   | IUserDeleteRequest
-  | IUserDeleteFail;
+  | IUserDeleteFail
+  | IUserUpdateRequest
+  | IUserUpdateSuccess
+  | IUserUpdateFail
+  | IUserUpdateRemove;

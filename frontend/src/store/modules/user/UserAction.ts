@@ -26,12 +26,17 @@ import {
   USER_DELETE_REQUEST,
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAIL,
+  USER_UPDATE_REMOVE,
 } from './types/UserTypes';
 
 import {
   SHIPPING_ADDRESS_INFORMATION_REMOVE,
   ShippingAddressDispatchTypes,
 } from '../shippingAddress/types/ShippingAddressTypes';
+import { IUser as IUpdateUser } from './types/UserTypes';
 
 interface IUser {
   id: string | undefined;
@@ -40,6 +45,7 @@ interface IUser {
   password: string;
 }
 
+type newUpdateUserType = Omit<IUpdateUser, 'token'>;
 // this async is because is using redux thunk
 export const login = (email: string, password: string) => async (
   dispatch: Dispatch<UserDispatchTypes>
@@ -270,6 +276,47 @@ export const deleteUser = (id: string) => async (
   } catch (error) {
     dispatch({
       type: USER_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+// this async is because is using redux thunk
+export const updateUser = (user: newUpdateUserType) => async (
+  dispatch: Dispatch<UserDispatchTypes>,
+  getState: () => RootStore
+) => {
+  try {
+    dispatch({
+      type: USER_UPDATE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo?.token}`,
+      },
+    };
+
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+
+    dispatch({
+      type: USER_UPDATE_SUCCESS,
+    });
+
+    dispatch({
+      type: USER_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
