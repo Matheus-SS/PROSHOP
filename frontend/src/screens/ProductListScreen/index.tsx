@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Table, Row, Col } from 'react-bootstrap';
 
@@ -9,33 +9,61 @@ import { listProducts } from '../../store/modules/product/ProductAction';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 
+import axios from 'axios';
+import { useFetch } from '../../hooks/useFetch';
+
+import { IProduct } from '../../store/modules/product/types/ProductTypes';
+
 type UrlParams = { id: string };
 
 const ProductListScreen = ({
   history,
   match,
 }: RouteComponentProps<UrlParams>) => {
-  const dispatch = useDispatch();
-
-  const productList = useSelector((state: RootStore) => state.productList);
-  const { loading, error, products } = productList;
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const userLogin = useSelector((state: RootStore) => state.userLogin);
   const { userInfo } = userLogin;
 
+  // loading products
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listProducts());
-    } else {
+    axios
+      .get<IProduct[]>('/api/products')
+      .then((response) => {
+        setProducts(response.data);
+        setLoading(false);
+        setError('');
+      })
+      .catch((err) => {
+        setError(
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message
+        );
+        setLoading(false);
+      });
+  }, []);
+
+  //send user to login if its not a admin
+  useEffect(() => {
+    if (!userInfo?.isAdmin) {
       history.push('/login');
     }
-  }, [dispatch, history, userInfo]);
+  }, [history, userInfo]);
 
-  const deleteHandler = (id: string) => {
-    if (window.confirm('Are you sure?')) {
-      // dispatch(deleteUser(id));
-    }
-  };
+  const deleteHandler = useCallback(
+    async (id: string): Promise<void> => {
+      if (window.confirm('Are you sure?')) {
+        const newProducts = products.filter((product) => product._id !== id);
+
+        setProducts(newProducts);
+        axios.delete(`/api/products/${id}`);
+      }
+    },
+    [products]
+  );
 
   return (
     <>
@@ -66,7 +94,7 @@ const ProductListScreen = ({
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {products?.map((product) => (
               <tr key={product._id}>
                 <td>{product._id}</td>
                 <td>{product.name}</td>

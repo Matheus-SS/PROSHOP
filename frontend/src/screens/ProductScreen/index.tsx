@@ -18,6 +18,8 @@ import {
 import Rating from '../../components/Rating';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
+import { IProduct } from '../../store/modules/product/types/ProductTypes';
+import { useFetch } from '../../hooks/useFetch';
 
 type UrlParams = { id: string };
 
@@ -27,19 +29,20 @@ const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
 
   const dispatch = useDispatch();
 
-  const productDetails = useSelector((state: RootStore) => state.productDetail);
-
-  const { loading, error, product } = productDetails;
+  // fetching data using custom hook
+  const { data: product, loading, error } = useFetch<IProduct>(
+    `/api/products/${match.params.id}`
+  );
 
   // that function transforms a single number into a array of number
   // Ex.: number 5 into [1, 2, 3, 4, 5]
   const arrayFromCountInStock = useMemo(() => {
     const array = Array.from(
-      Array(product.countInStock),
+      Array(product?.countInStock),
       (x, index) => index + 1
     );
     return array;
-  }, [product.countInStock]);
+  }, [product?.countInStock]);
 
   useEffect(() => {
     dispatch(listProductDetails(match.params.id));
@@ -108,7 +111,7 @@ const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
                   </Row>
                 </ListGroup.Item>
 
-                {product.countInStock > 0 && (
+                {product && product.countInStock > 0 && (
                   <ListGroup.Item>
                     <Row className="align-items-center">
                       <Col xs={5} sm={5} md={8} lg={9}>

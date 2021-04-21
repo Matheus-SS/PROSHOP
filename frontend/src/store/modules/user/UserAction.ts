@@ -60,6 +60,9 @@ export const login = (email: string, password: string) => async (
       password,
     });
 
+    // set Token when user logins
+    axios.defaults.headers['Authorization'] = `Bearer ${data.token}`;
+
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: data,

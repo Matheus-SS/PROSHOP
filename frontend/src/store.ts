@@ -22,6 +22,7 @@ import GetOrderByAuthenticateUser from './store/modules/order/reducers/GetOrderB
 
 import { ICart } from './store/modules/cart/types/CartTypes';
 import { IUser } from './store/modules/user/types/UserTypes';
+import axios from 'axios';
 
 const rootReducer = combineReducers({
   productList: ProductListReducer,
@@ -55,6 +56,9 @@ let userInfoFromStorage: IUser | null = null;
 
 if (userInfo) {
   userInfoFromStorage = JSON.parse(userInfo);
+  axios.defaults.headers[
+    'Authorization'
+  ] = `Bearer ${userInfoFromStorage?.token}`;
 }
 
 const middleware = [thunk];
