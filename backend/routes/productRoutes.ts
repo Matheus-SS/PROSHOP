@@ -15,6 +15,20 @@ productRouter.get('/', asyncHandler(productController.getProducts));
 // @access     Public
 productRouter.get('/:id', asyncHandler(productController.getProductById));
 
+productRouter.post(
+  '/',
+  protect,
+  admin,
+  asyncHandler(productController.createProduct)
+);
+
+productRouter.put(
+  '/:id',
+  protect,
+  admin,
+  asyncHandler(productController.updateProduct)
+);
+
 productRouter.delete('/:id', protect, admin, productController.deleteProduct);
 
 export default productRouter;
