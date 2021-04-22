@@ -24,6 +24,9 @@ const ProductListScreen = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const [loadingCreateProduct, setLoadingCreateProduct] = useState(false);
+  const [errorCreateProduct, setErrorLoadingCreateProduct] = useState('');
+
   const userLogin = useSelector((state: RootStore) => state.userLogin);
   const { userInfo } = userLogin;
 
@@ -65,6 +68,18 @@ const ProductListScreen = ({
     [products]
   );
 
+  const createProductHandler = useCallback(async () => {
+    setLoadingCreateProduct(true);
+    try {
+      const { data } = await axios.post('/api/products');
+      setLoadingCreateProduct(false);
+      history.push(`/admin/product/${data._id}/edit`);
+    } catch (error) {
+      setLoadingCreateProduct(false);
+      setErrorLoadingCreateProduct('error when trying to create a new product');
+    }
+  }, [history]);
+
   return (
     <>
       <Row className="align-items-center">
@@ -72,9 +87,18 @@ const ProductListScreen = ({
           <h1>Products</h1>
         </Col>
         <Col className="text-right">
-          <Button className="my-3" onClick={() => console.log('')}>
-            <i className="fas fa-plus"></i> Create Product
+          <Button className="my-3" onClick={createProductHandler}>
+            {loadingCreateProduct ? (
+              'Carregando ...'
+            ) : (
+              <>
+                <i className="fas fa-plus"></i> Create Product
+              </>
+            )}
           </Button>
+          {errorCreateProduct && (
+            <Message variant="danger">{errorCreateProduct}</Message>
+          )}
         </Col>
       </Row>
       {loading ? (
