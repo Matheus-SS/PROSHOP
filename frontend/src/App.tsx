@@ -21,6 +21,7 @@ import UserEditScreen from './screens/UserEditScreen';
 import ProductListScreen from './screens/ProductListScreen';
 
 import PageNotFound from './screens/PageNotFound';
+import ProductEditScreen from './screens/ProductEditScreen';
 
 const App = () => {
   return (
@@ -39,6 +40,10 @@ const App = () => {
             <Route path="/register" component={RegisterScreen} />
             <Route path="/profile" component={ProfileScreen} />
             <Route path="/product/:id" component={ProductScreen} />
+            <Route
+              path="/admin/product/:id/edit"
+              component={ProductEditScreen}
+            />
             <Route path="/admin/productList" component={ProductListScreen} />
             <Route path="/cart" component={CartScreen} />
             <Route path="/admin/userList" component={UserListScreen} />
