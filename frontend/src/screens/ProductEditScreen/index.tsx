@@ -20,6 +20,7 @@ import Loader from '../../components/Loader';
 import FormContainer from '../../components/FormContainer';
 import { useFetch } from '../../hooks/useFetch';
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
+import axios from 'axios';
 
 type UrlParams = { id: string };
 
@@ -33,6 +34,10 @@ const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
   const [category, setCategory] = useState<string>('');
   const [countInStock, setCountInStock] = useState<number>(0);
   const [description, setDescription] = useState<string>('');
+
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -54,13 +59,34 @@ const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
     }
   }, [product]);
 
-  // const submitHandler = useCallback(
-  //   (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     dispatch(updateUser({ _id: userId, name, email, isAdmin }));
-  //   },
-  //   [dispatch, name, email, isAdmin, userId]
-  // );
+  const submitHandler = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setUpdateLoading(true);
+      setFailed(false);
+      setSuccess(false);
+      const product = {
+        name,
+        price,
+        description,
+        image,
+        brand,
+        category,
+        countInStock,
+      };
+
+      try {
+        await axios.put(`/api/products/${productId}`, product);
+        setUpdateLoading(false);
+
+        setSuccess(true);
+      } catch (error) {
+        setUpdateLoading(false);
+        setFailed(true);
+      }
+    },
+    [name, price, description, image, brand, category, countInStock, productId]
+  );
 
   return (
     <>
@@ -74,7 +100,7 @@ const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
         ) : error ? (
           <Message variant="danger">{error}</Message>
         ) : (
-          <Form onSubmit={() => console.log('')}>
+          <Form onSubmit={submitHandler}>
             <Form.Group controlId="name">
               <Form.Label>Name</Form.Label>
               <Form.Control
@@ -144,6 +170,18 @@ const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>
+
+            {success && (
+              <Message variant="success" autoClose={true}>
+                Product updated
+              </Message>
+            )}
+
+            {failed && (
+              <Message variant="danger" autoClose={true}>
+                Failed when trying to update the product
+              </Message>
+            )}
 
             <Button type="submit" variant="primary">
               Update

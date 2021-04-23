@@ -99,6 +99,6 @@ export default class ProductController {
     }
 
     const updatedProduct = await product.save();
-    return response.status(201).json(product);
+    return response.status(201).json(updatedProduct);
   }
 }
