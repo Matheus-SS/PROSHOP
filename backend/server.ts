@@ -6,13 +6,21 @@ import { notFound, errorHandler } from './middleware/ErrorMiddleware';
 import connectDB from './config/database';
 import path from 'path';
 import routes from './routes';
-import './controllers/ProductController';
-import { admin } from './middleware/AuthenticationMiddleware';
+
+import cloudinary from 'cloudinary';
+
 connectDB();
 
 const app = express();
 
 app.use(express.json());
+
+// config image storage cloud
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 app.use(routes);
 
@@ -32,8 +40,9 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// PAYPAL
+app.use('./uploads', express.static(path.join(__dirname, '/backend/uploads')));
 
+// PAYPAL
 app.get('/api/config/paypal', (request: Request, response: Response) => {
   response.send(process.env.PAYPAL_CLIENT_ID);
 });
