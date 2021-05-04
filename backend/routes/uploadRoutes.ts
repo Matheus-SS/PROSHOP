@@ -4,7 +4,6 @@ import multer from 'multer';
 import cloudinary from 'cloudinary';
 import asyncHandler from 'express-async-handler';
 import sharp from 'sharp';
-import isJpg from 'is-jpg';
 import fs from 'fs';
 
 const uploadRouter = express.Router();
@@ -34,7 +33,7 @@ function checkFileType(
   if (extName && mimeType) {
     return callback(null, true);
   } else {
-    callback(new Error('Images only!'));
+    return callback(new Error('Images only!'));
   }
 }
 
@@ -64,6 +63,7 @@ uploadRouter.post(
   upload.single('image'),
   asyncHandler(async (request: Request, response: Response) => {
     const { filename: image } = request.file;
+
     const compressedImageFolder = path.resolve(
       request.file.destination,
       'compressed',
@@ -78,12 +78,12 @@ uploadRouter.post(
     fs.unlinkSync(request.file.path);
 
     const uploadPhoto = await cloudinary.v2.uploader.upload(
-      path.join(compressedImageFolder)
+      compressedImageFolder
     );
 
     // console.log(uploadPhoto); // This will give you all the information back from the uploaded photo result
     // console.log(uploadPhoto.url); // This is what we want to send back now in the  res.send
-    return response.send(uploadPhoto.url);
+    return response.send(uploadPhoto);
   })
 );
 

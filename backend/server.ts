@@ -12,7 +12,6 @@ import cloudinary from 'cloudinary';
 connectDB();
 
 const app = express();
-
 app.use(express.json());
 
 // config image storage cloud
@@ -40,7 +39,10 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.use('./uploads', express.static(path.join(__dirname, '/backend/uploads')));
+app.use(
+  './uploads',
+  express.static(path.join(__dirname, '/backend/uploads/compressed'))
+);
 
 // PAYPAL
 app.get('/api/config/paypal', (request: Request, response: Response) => {

@@ -1,19 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Link,
-  RouteComponentProps,
-  useHistory,
-  useLocation,
-} from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
-
-import { RootStore } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  getUserDetails,
-  updateUser,
-} from '../../store/modules/user/UserAction';
-import { USER_UPDATE_REMOVE } from '../../store/modules/user/types/UserTypes';
+import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { Form, Button, Row, Col, Image, ProgressBar } from 'react-bootstrap';
 
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
@@ -21,6 +8,7 @@ import FormContainer from '../../components/FormContainer';
 import { useFetch } from '../../hooks/useFetch';
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
 import axios from 'axios';
+import { isImage } from '../../utils/fileChecker';
 
 type UrlParams = { id: string };
 
@@ -39,13 +27,33 @@ const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
   const [failed, setFailed] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const dispatch = useDispatch();
-
-  const history = useHistory();
+  const [fileInputState, setFileInputState] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | string>('');
+  const [previewSource, setPreviewSource] = useState<
+    string | ArrayBuffer | null
+  >('');
+  const [progress, setProgress] = useState(0);
+  const [uploading, setUploading] = useState(false);
 
   const { data: product, error, loading } = useFetch<IProduct>(
     `/api/products/${productId}`
   );
+
+  const handleFileInputChange = (e: ChangeEvent) => {
+    try {
+      const target = e.target as HTMLInputElement;
+      const file: File = (target.files as FileList)[0];
+
+      if (isImage(file.name)) {
+        setSelectedFile(file);
+        previewFile(file);
+        setFileInputState(target.value);
+      }
+    } catch (error) {
+      setFileInputState('');
+      console.log('Not a image');
+    }
+  };
 
   useEffect(() => {
     if (product) {
@@ -59,6 +67,45 @@ const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
     }
   }, [product]);
 
+  // loading a preview image
+  const previewFile = (file: File) => {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+      setPreviewSource(reader.result);
+    };
+  };
+
+  const handleSubmitFile = () => {
+    if (!selectedFile) return;
+    uploadImage(selectedFile);
+  };
+
+  const uploadImage = async (file: File | string) => {
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const config = {
+      onUploadProgress: (progressEvent: ProgressEvent) =>
+        setProgress(
+          Math.round((progressEvent.loaded / progressEvent.total) * 100)
+        ),
+    };
+
+    try {
+      const { data } = await axios.post('/api/upload', formData, config);
+      setImage(data.url);
+      setUploading(false);
+      setFileInputState('');
+      setPreviewSource('');
+    } catch (error) {
+      console.log('ERRO...', error);
+      setUploading(false);
+    }
+  };
   const submitHandler = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -124,13 +171,61 @@ const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
             <Form.Group controlId="image">
               <Form.Label>Image</Form.Label>
               <Form.Control
+                readOnly
                 type="text"
                 placeholder="Enter image url"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
-            </Form.Group>
 
+              <Row style={{ margin: '10px 0' }}>
+                <Col sm={12} md={12} lg={12} xl={12}>
+                  {image && <Image src={image} alt="chosen" width="100%" />}
+                </Col>
+              </Row>
+              <br />
+              <Form.File
+                id="image-file"
+                label="Choose File"
+                value={fileInputState}
+                custom
+                onChange={handleFileInputChange}
+              ></Form.File>
+            </Form.Group>
+            <Button
+              onClick={handleSubmitFile}
+              type="button"
+              className="btn-block"
+            >
+              Upload Image
+            </Button>
+
+            <Row style={{ margin: '20px 0' }}>
+              <Col sm={12} md={12} lg={12} xl={12}>
+                {progress !== 100 && (
+                  <ProgressBar animated now={progress} label={`${progress}%`} />
+                )}
+              </Col>
+            </Row>
+
+            {uploading && (
+              <Row style={{ margin: '20px 0' }}>
+                <Col sm={12} md={12} lg={12} xl={12}>
+                  Uploading image to server . . .
+                </Col>
+              </Row>
+            )}
+            <Row style={{ margin: '20px 0' }}>
+              <Col sm={12} md={12} lg={12} xl={12}>
+                {previewSource && (
+                  <Image
+                    src={String(previewSource)}
+                    alt="chosen"
+                    width="100%"
+                  />
+                )}
+              </Col>
+            </Row>
             <Form.Group controlId="brand">
               <Form.Label>Brand</Form.Label>
               <Form.Control
