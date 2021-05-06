@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Dispatch } from 'redux';
 import { RootStore } from '../../../store';
+import { CART_ITEM_REMOVE } from '../cart/types/CartTypes';
 import {
   ORDER_CREATE_FAIL,
   ORDER_CREATE_REQUEST,
@@ -45,6 +46,12 @@ export const createOrder = (order: IOrder) => async (
       type: ORDER_CREATE_SUCCESS,
       payload: data,
     });
+
+    dispatch({
+      type: CART_ITEM_REMOVE,
+      payload: data,
+    });
+    localStorage.removeItem('@ProShop:cartItems');
   } catch (error) {
     dispatch({
       type: ORDER_CREATE_FAIL,

@@ -19,9 +19,10 @@ import OrderScreen from './screens/OrderScreen';
 import UserListScreen from './screens/UserListScreen';
 import UserEditScreen from './screens/UserEditScreen';
 import ProductListScreen from './screens/ProductListScreen';
+import ProductEditScreen from './screens/ProductEditScreen';
+import OrderListScreen from './screens/OrderListScreen';
 
 import PageNotFound from './screens/PageNotFound';
-import ProductEditScreen from './screens/ProductEditScreen';
 
 const App = () => {
   return (
@@ -32,6 +33,8 @@ const App = () => {
           <Switch>
             <Route exact path="/" component={HomeScreen} />
             <Route path="/order/:id" component={OrderScreen} />
+            <Route path="/admin/orderList" component={OrderListScreen} />
+
             <Route path="/placeorder" component={PlaceOrderScreen} />
             <Route path="/payment" component={PaymentScreen} />
             <Route path="/reset-password" component={ResetPasswordScreen} />

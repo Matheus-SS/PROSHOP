@@ -11,6 +11,7 @@ import {
   CART_SAVE_PAYMENT_METHOD_REQUEST,
   CART_SAVE_PAYMENT_METHOD_SUCCESS,
   CART_SAVE_PAYMENT_METHOD_FAIL,
+  CART_ITEM_REMOVE,
 } from '../types/CartTypes';
 
 const INITIAL_STATE: ICartState = {
@@ -90,6 +91,12 @@ const cartReducer: Reducer<ICartState> = (
       return {
         ...state,
         paymentMethod: action.payload,
+      };
+
+    case CART_ITEM_REMOVE:
+      return {
+        ...state,
+        cartItems: [],
       };
 
     default:

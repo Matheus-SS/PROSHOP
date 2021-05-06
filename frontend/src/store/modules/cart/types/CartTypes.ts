@@ -1,6 +1,7 @@
 export const CART_ADD_ITEM_REQUEST = 'CART_ADD_ITEM_REQUEST';
 export const CART_ADD_ITEM_SUCCESS = 'CART_ADD_ITEM_SUCCESS';
 export const CART_ADD_ITEM_FAIL = 'CART_ADD_ITEM_FAIL';
+export const CART_ITEM_REMOVE = 'CART_ITEM_REMOVE';
 
 export const CART_REMOVE_ITEM_REQUEST = 'CART_REMOVE_ITEM_REQUEST';
 export const CART_REMOVE_ITEM_SUCCESS = 'CART_REMOVE_ITEM_SUCCESS';
@@ -37,6 +38,12 @@ export interface CartAddItemSuccess {
   type: typeof CART_ADD_ITEM_SUCCESS;
   payload: ICart;
 }
+
+export interface CartRemoveItem {
+  type: typeof CART_ITEM_REMOVE;
+  payload: ICart[];
+}
+
 // Type for reducer CART
 export interface CartAddItemFail {
   type: typeof CART_ADD_ITEM_FAIL;
@@ -79,4 +86,5 @@ export type CartDispatchTypes =
   | CartRemoveItemFail
   | CartSavePaymentMethodRequest
   | CartSavePaymentMethodSuccess
-  | CartSavePaymentMethodFail;
+  | CartSavePaymentMethodFail
+  | CartRemoveItem;

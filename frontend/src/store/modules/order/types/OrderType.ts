@@ -1,4 +1,5 @@
 import { IShippingAddress } from '../../shippingAddress/types/ShippingAddressTypes';
+import { CartRemoveItem } from '../../cart/types/CartTypes';
 
 export const ORDER_CREATE_REQUEST = 'ORDER_CREATE_REQUEST';
 export const ORDER_CREATE_SUCCESS = 'ORDER_CREATE_SUCCESS';
@@ -146,4 +147,5 @@ export type OrderDispatchTypes =
   | IOrderPayReset
   | IOrderListMeRequest
   | IOrderListMeSuccess
-  | IOrderListMeFail;
+  | IOrderListMeFail
+  | CartRemoveItem;
