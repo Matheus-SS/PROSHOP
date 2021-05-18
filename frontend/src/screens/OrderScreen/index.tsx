@@ -4,7 +4,7 @@ import axios from 'axios';
 import { PayPalButton } from 'react-paypal-button-v2';
 
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,7 @@ import {
 import {
   ORDER_PAY_RESET,
   IPaymentResult,
+  IOrder,
 } from '../../store/modules/order/types/OrderType';
 
 import Loader from '../../components/Loader';
@@ -23,13 +24,19 @@ import format from 'date-fns/format';
 
 type UrlParams = { id: string };
 
-const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
+const OrderScreen = ({ match, history }: RouteComponentProps<UrlParams>) => {
   const dispatch = useDispatch();
 
   const [sdkReady, setSdkReady] = useState<boolean>(false);
 
+  const [loadingDelivered, setLoadingDelivered] = useState(false);
+  const [delivered, setDelivered] = useState(false);
+
   const orderDetails = useSelector((state: RootStore) => state.orderDetails);
   const { order, loading, error } = orderDetails;
+
+  const userLogin = useSelector((state: RootStore) => state.userLogin);
+  const { userInfo } = userLogin;
 
   const orderPay = useSelector((state: RootStore) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
@@ -54,6 +61,16 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
     }
   }
 
+  //CRIAR LOADING DE ORDERS
+  useEffect(() => {
+    if (!userInfo) {
+      history.push('/login');
+    }
+    if (order?.isDelivered) {
+      setDelivered(order.isDelivered);
+    }
+  }, [order, userInfo]);
+
   useEffect(() => {
     const addPaypalScript = async () => {
       const { data: clientId } = await axios.get('/api/config/paypal');
@@ -69,10 +86,7 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
       document.body.appendChild(script);
     };
 
-    if (!order || successPay) {
-      dispatch({ type: ORDER_PAY_RESET });
-      dispatch(getOrderDetails(match.params.id));
-    }
+    dispatch(getOrderDetails(match.params.id));
 
     if (!order?.isPaid) {
       if ((window as any).paypal === undefined) {
@@ -81,11 +95,24 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, match.params.id, successPay, order]);
+  }, [dispatch, match.params.id, successPay]);
 
   const successPaymentHandler = (paymentResult: IPaymentResult) => {
-    console.log(paymentResult);
+    //console.log(paymentResult);
     dispatch(payOrder(match.params.id, paymentResult));
+  };
+
+  const deliverHandler = async () => {
+    setLoadingDelivered(true);
+    try {
+      await axios.put(`/api/orders/${order?._id}/deliver`);
+      setDelivered(true);
+      setLoadingDelivered(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingDelivered(false);
+      setDelivered(false);
+    }
   };
 
   return loading ? (
@@ -120,7 +147,7 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
                   {order?.shippingAddress?.country}
                 </>
               </p>
-              {order?.isDelivered ? (
+              {delivered ? (
                 <Message variant="success">
                   Delivered on {FormatDate(order?.deliveredAt)}
                 </Message>
@@ -227,6 +254,21 @@ const OrderScreen = ({ match }: RouteComponentProps<UrlParams>) => {
                   )}
                 </ListGroup.Item>
               )}
+              {loadingDelivered && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order?.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverHandler}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>

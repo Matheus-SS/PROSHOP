@@ -48,7 +48,6 @@ const OrderListScreen = () => {
       });
   }, []);
 
-  console.log(orders);
   return (
     <>
       <h1> Orders</h1>
