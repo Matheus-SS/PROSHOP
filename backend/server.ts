@@ -6,12 +6,18 @@ import { notFound, errorHandler } from './middleware/ErrorMiddleware';
 import connectDB from './config/database';
 import path from 'path';
 import routes from './routes';
+import morgan from 'morgan';
 
 import cloudinary from 'cloudinary';
 
 connectDB();
 
 const app = express();
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
 app.use(express.json());
 
 // config image storage cloud

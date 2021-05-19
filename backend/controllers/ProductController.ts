@@ -73,15 +73,8 @@ export default class ProductController {
     request: Request,
     response: Response
   ): Promise<Response> {
-    const {
-      name,
-      price,
-      description,
-      image,
-      brand,
-      category,
-      countInStock,
-    } = request.body;
+    const { name, price, description, image, brand, category, countInStock } =
+      request.body;
 
     const product = await Product.findById(request.params.id);
 

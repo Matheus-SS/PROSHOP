@@ -1,5 +1,5 @@
 import mongoose, { Document, Types } from 'mongoose';
-import { ReviewSchema } from './ReviewModel';
+import { IReview, ReviewSchema } from './ReviewModel';
 
 export interface IProduct {
   user: Types.ObjectId;
@@ -8,7 +8,7 @@ export interface IProduct {
   brand: string;
   category: string;
   description: string;
-  reviews: mongoose.Schema[];
+  reviews: IReview[];
   rating: number;
   numReviews: number;
   price: number;
