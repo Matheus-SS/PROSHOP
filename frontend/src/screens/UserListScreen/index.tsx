@@ -33,7 +33,7 @@ const UserListScreen = () => {
     } else {
       history.push('/login');
     }
-  }, [dispatch, successDelete, userInfo]);
+  }, [dispatch, successDelete, userInfo, history]);
 
   return (
     <>

@@ -53,7 +53,7 @@ export default class ReviewController {
 
     products.rating = averageRating;
 
-    await products.save();
-    return response.status(201).json('Review added');
+    const newProduct = await products.save();
+    return response.status(201).json(newProduct);
   }
 }

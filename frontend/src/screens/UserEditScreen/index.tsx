@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import {
-  Link,
-  RouteComponentProps,
-  useHistory,
-  useLocation,
-} from 'react-router-dom';
+import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -26,7 +21,7 @@ const UserEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
 
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const dispatch = useDispatch();

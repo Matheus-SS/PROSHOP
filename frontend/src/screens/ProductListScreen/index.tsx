@@ -3,14 +3,12 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { Button, Table, Row, Col } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { listProducts } from '../../store/modules/product/ProductAction';
+import { useSelector } from 'react-redux';
 
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 
 import axios from 'axios';
-import { useFetch } from '../../hooks/useFetch';
 
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
 

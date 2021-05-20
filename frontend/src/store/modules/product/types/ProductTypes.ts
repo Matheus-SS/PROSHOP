@@ -6,6 +6,14 @@ export const PRODUCT_DETAILS_REQUEST = 'PRODUCT_DETAILS_REQUEST';
 export const PRODUCT_DETAILS_SUCCESS = 'PRODUCT_DETAILS_SUCCESS';
 export const PRODUCT_DETAILS_FAIL = 'PRODUCT_DETAILS_FAIL';
 
+export interface IReview {
+  _id: string;
+  rating: number;
+  name: string;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
+}
 export interface IProduct {
   rating: number;
   numReviews: number;
@@ -19,7 +27,7 @@ export interface IProduct {
   category: string;
   user: string;
   __v: number;
-  reviews: string[];
+  reviews: IReview[];
   createdAt: string;
   updatedAt: string;
 }

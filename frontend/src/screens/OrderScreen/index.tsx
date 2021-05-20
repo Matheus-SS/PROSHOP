@@ -12,11 +12,7 @@ import {
   getOrderDetails,
   payOrder,
 } from '../../store/modules/order/OrderAction';
-import {
-  ORDER_PAY_RESET,
-  IPaymentResult,
-  IOrder,
-} from '../../store/modules/order/types/OrderType';
+import { IPaymentResult } from '../../store/modules/order/types/OrderType';
 
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
@@ -63,13 +59,14 @@ const OrderScreen = ({ match, history }: RouteComponentProps<UrlParams>) => {
 
   //CRIAR LOADING DE ORDERS
   useEffect(() => {
+    setDelivered(false);
     if (!userInfo) {
       history.push('/login');
     }
     if (order?.isDelivered) {
       setDelivered(order.isDelivered);
     }
-  }, [order, userInfo]);
+  }, [order, userInfo, history]);
 
   useEffect(() => {
     const addPaypalScript = async () => {

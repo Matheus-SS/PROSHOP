@@ -3,8 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { listUsers, deleteUser } from '../../store/modules/user/UserAction';
+import { useSelector } from 'react-redux';
 
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
@@ -16,7 +15,6 @@ const OrderListScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const dispatch = useDispatch();
   const history = useHistory();
 
   const userLogin = useSelector((state: RootStore) => state.userLogin);

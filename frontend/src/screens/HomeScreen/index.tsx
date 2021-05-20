@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Col, Row } from 'react-bootstrap';
 
@@ -11,9 +11,11 @@ import { useFetch } from '../../hooks/useFetch';
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
 
 const HomeScreen = () => {
-  const { data: products, loading, error } = useFetch<IProduct[]>(
-    '/api/products'
-  );
+  const {
+    data: products,
+    loading,
+    error,
+  } = useFetch<IProduct[]>('/api/products');
 
   return (
     <>

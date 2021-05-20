@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-bootstrap';
-import { useStore } from 'react-redux';
 
 interface IMessage {
   variant?:
@@ -35,7 +34,7 @@ const Message = ({
 
       return () => clearTimeout(timer);
     }
-  }, [autoClose]);
+  }, [autoClose, time]);
 
   return <>{open && <Alert variant={variant}>{children}</Alert>}</>;
 };

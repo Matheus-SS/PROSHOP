@@ -2,7 +2,7 @@ import React from 'react';
 
 interface IRating {
   value: number;
-  text: string;
+  text?: string;
   color?: string;
 }
 const Rating = ({ value, text, color = '#f8e825' }: IRating) => {

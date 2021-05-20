@@ -81,6 +81,11 @@ uploadRouter.post(
       compressedImageFolder
     );
 
+    //remove the file from compressed paste
+    await fs.promises.unlink(
+      path.resolve(request.file.destination, 'compressed', image)
+    );
+
     // console.log(uploadPhoto); // This will give you all the information back from the uploaded photo result
     // console.log(uploadPhoto.url); // This is what we want to send back now in the  res.send
     return response.send(uploadPhoto);

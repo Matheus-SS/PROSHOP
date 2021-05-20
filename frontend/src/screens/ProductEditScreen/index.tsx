@@ -29,15 +29,16 @@ const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
 
   const [fileInputState, setFileInputState] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | string>('');
-  const [previewSource, setPreviewSource] = useState<
-    string | ArrayBuffer | null
-  >('');
+  const [previewSource, setPreviewSource] =
+    useState<string | ArrayBuffer | null>('');
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
 
-  const { data: product, error, loading } = useFetch<IProduct>(
-    `/api/products/${productId}`
-  );
+  const {
+    data: product,
+    error,
+    loading,
+  } = useFetch<IProduct>(`/api/products/${productId}`);
 
   const handleFileInputChange = (e: ChangeEvent) => {
     try {
@@ -278,9 +279,13 @@ const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
               </Message>
             )}
 
-            <Button type="submit" variant="primary">
-              Update
-            </Button>
+            {updateLoading ? (
+              <Loader />
+            ) : (
+              <Button type="submit" variant="primary">
+                Update
+              </Button>
+            )}
           </Form>
         )}
       </FormContainer>
