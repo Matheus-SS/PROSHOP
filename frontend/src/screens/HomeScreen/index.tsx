@@ -9,13 +9,19 @@ import Loader from '../../components/Loader';
 import { useFetch } from '../../hooks/useFetch';
 
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
+import { useParams } from 'react-router';
 
+interface IParams {
+  keyword: string;
+}
 const HomeScreen = () => {
+  const { keyword = '' } = useParams<IParams>();
+
   const {
     data: products,
     loading,
     error,
-  } = useFetch<IProduct[]>('/api/products');
+  } = useFetch<IProduct[]>(`/api/products?keyword=${keyword}`);
 
   return (
     <>

@@ -7,9 +7,12 @@ import ListAllProductService from '../services/products/ListAllProductsService';
 import ListProductByIdService from '../services/products/ListProductByIdService';
 
 export default class ProductController {
-  public async getProducts(_: Request, response: Response): Promise<Response> {
+  public async getProducts(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
     const getProducts = new ListAllProductService(new ProductRepository());
-    const products = await getProducts.execute();
+    const products = await getProducts.execute(String(request.query.keyword));
     return response.status(200).json(products);
   }
 

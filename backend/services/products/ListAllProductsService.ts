@@ -8,8 +8,16 @@ class ListAllProductService {
     this.productRepository = productRepository;
   }
 
-  public async execute(): Promise<IProductDocument[]> {
-    const products = await this.productRepository.listProducts();
+  public async execute(keyword: string): Promise<IProductDocument[]> {
+    const keyWord = keyword
+      ? {
+          name: {
+            $regex: keyword,
+            $options: 'i',
+          },
+        }
+      : {};
+    const products = await this.productRepository.listProducts(keyWord);
     return products;
   }
 }

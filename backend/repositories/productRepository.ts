@@ -4,7 +4,7 @@ import { IProductDocument } from '../models/ProductModel';
 import Product from '../models/ProductModel';
 
 export interface IProductRepository {
-  listProducts(): Promise<IProductDocument[]>;
+  listProducts(keyword: {}): Promise<IProductDocument[]>;
   findProductById(id: string): Promise<IProductDocument | null>;
 }
 
@@ -15,8 +15,8 @@ export default class ProductRepository implements IProductRepository {
     this.product = Product;
   }
 
-  public async listProducts(): Promise<IProductDocument[]> {
-    const products = await this.product.find({});
+  public async listProducts(keyWord: {}): Promise<IProductDocument[]> {
+    const products = await this.product.find({ ...keyWord });
     return products;
   }
 
