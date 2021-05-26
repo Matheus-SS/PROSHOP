@@ -25,8 +25,6 @@ productRouter.get('/', asyncHandler(productController.getProducts));
 // @access     Public
 productRouter.get('/:id', asyncHandler(productController.getProductById));
 
-productRouter.get('/:id', asyncHandler(productController.getProductById));
-
 productRouter.post(
   '/',
   protect,

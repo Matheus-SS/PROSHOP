@@ -12,8 +12,15 @@ export default class ProductController {
     response: Response
   ): Promise<Response> {
     const getProducts = new ListAllProductService(new ProductRepository());
-    const products = await getProducts.execute(String(request.query.keyword));
-    return response.status(200).json(products);
+    const productData = {
+      keyword: String(request.query.keyword),
+      pageNumber: Number(request.query.pageNumber),
+    };
+
+    const { products, currentPage, quantityPages } = await getProducts.execute(
+      productData
+    );
+    return response.status(200).json({ products, currentPage, quantityPages });
   }
 
   public async getProductById(

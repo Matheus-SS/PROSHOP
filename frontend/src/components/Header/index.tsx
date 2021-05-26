@@ -5,6 +5,7 @@ import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { RootStore } from '../../store';
 import { logout } from '../../store/modules/user/UserAction';
 import SearchBox from '../SearchBox';
+import { useLocation } from 'react-router';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,17 @@ const Header = () => {
   const logoutHandler = useCallback(() => {
     dispatch(logout());
   }, [dispatch]);
+
+  const location = useLocation();
+
+  const path = location.pathname;
+  const checkSearchBox =
+    path.split('/')[1] === '' ||
+    path.split('/')[1] === 'page' ||
+    path.split('/')[1] === 'search'
+      ? true
+      : false;
+
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -24,7 +36,7 @@ const Header = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <SearchBox />
+            {checkSearchBox && <SearchBox />}
             <Nav className="ml-auto">
               <LinkContainer to="/cart">
                 <Nav.Link>

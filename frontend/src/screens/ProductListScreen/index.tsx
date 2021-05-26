@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, useParams } from 'react-router-dom';
 import { Button, Table, Row, Col } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -7,18 +7,24 @@ import { useSelector } from 'react-redux';
 
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
+import Paginate from '../../components/Paginate';
 
 import axios from 'axios';
 
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
 
-type UrlParams = { id: string };
+interface IParams {
+  pageNumber: string;
+}
 
-const ProductListScreen = ({
-  history,
-  match,
-}: RouteComponentProps<UrlParams>) => {
+const ProductListScreen = ({ history }: RouteComponentProps) => {
+  const { pageNumber = 1 } = useParams<IParams>();
+  const cancelToken = axios.CancelToken;
+  const source = cancelToken.source();
+
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [quantityPage, setQuantityPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -30,22 +36,35 @@ const ProductListScreen = ({
 
   // loading products
   useEffect(() => {
+    setLoading(true);
     axios
-      .get<IProduct[]>('/api/products')
+      .get(`/api/products?pageNumber=${pageNumber}`, {
+        cancelToken: source.token,
+      })
       .then((response) => {
-        setProducts(response.data);
+        setProducts(response.data.products);
+        setCurrentPage(response.data.currentPage);
+        setQuantityPage(response.data.quantityPages);
         setLoading(false);
         setError('');
       })
       .catch((err) => {
-        setError(
-          err.response && err.response.data.message
-            ? err.response.data.message
-            : err.message
-        );
-        setLoading(false);
+        if (axios.isCancel(err)) {
+          console.log(err.message);
+        } else {
+          setError(
+            err.response && err.response.data.message
+              ? err.response.data.message
+              : err.message
+          );
+          setLoading(false);
+        }
       });
-  }, []);
+
+    return () => {
+      source.cancel('axios request cancelled');
+    };
+  }, [pageNumber]);
 
   //send user to login if its not a admin
   useEffect(() => {
@@ -104,44 +123,47 @@ const ProductListScreen = ({
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
-        <Table striped bordered hover responsive className="table-sm">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>NAME</th>
-              <th>PRICE</th>
-              <th>CATEGORY</th>
-              <th>BRAND</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {products?.map((product) => (
-              <tr key={product._id}>
-                <td>{product._id}</td>
-                <td>{product.name}</td>
-                <td>${product.price}</td>
-                <td>{product.category}</td>
-
-                <td>{product.brand}</td>
-                <td>
-                  <Link to={`/admin/product/${product._id}/edit`}>
-                    <Button variant="light" className="btn-sm">
-                      <i className="fas fa-edit"></i>
-                    </Button>
-                  </Link>
-                  <Button
-                    variant="danger"
-                    className="btn-sm"
-                    onClick={() => deleteHandler(product._id)}
-                  >
-                    <i className="fas fa-trash"></i>
-                  </Button>
-                </td>
+        <>
+          <Table striped bordered hover responsive className="table-sm">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>PRICE</th>
+                <th>CATEGORY</th>
+                <th>BRAND</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+            <tbody>
+              {products?.map((product) => (
+                <tr key={product._id}>
+                  <td>{product._id}</td>
+                  <td>{product.name}</td>
+                  <td>${product.price}</td>
+                  <td>{product.category}</td>
+
+                  <td>{product.brand}</td>
+                  <td>
+                    <Link to={`/admin/product/${product._id}/edit`}>
+                      <Button variant="light" className="btn-sm">
+                        <i className="fas fa-edit"></i>
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="danger"
+                      className="btn-sm"
+                      onClick={() => deleteHandler(product._id)}
+                    >
+                      <i className="fas fa-trash"></i>
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Paginate totalOfPages={quantityPage} currentPage={currentPage} />
+        </>
       )}
     </>
   );
