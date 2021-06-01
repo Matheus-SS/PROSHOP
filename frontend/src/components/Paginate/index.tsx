@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Pagination } from 'react-bootstrap';
 import { useLocation } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
@@ -13,11 +13,17 @@ const Paginate = ({ totalOfPages, currentPage }: IPaginate) => {
   const baseURL =
     path.split('/page/')[0] === '/' ? '' : path.split('/page/')[0];
 
+  // that function transforms a single number into a array
+  const arrayFromTotalOfPages = useMemo(() => {
+    const array = Array.from(Array(totalOfPages));
+    return array;
+  }, [totalOfPages]);
+
   return (
     <>
       {totalOfPages > 1 && (
         <Pagination className="justify-content-center my-3">
-          {[...Array(totalOfPages).keys()].map((index) => (
+          {arrayFromTotalOfPages.map((_, index) => (
             <LinkContainer key={index} to={`${baseURL}/page/${index + 1}`}>
               <Pagination.Item active={index + 1 === currentPage}>
                 {index + 1}

@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es5",
     "downlevelIteration": true,
+    "importHelpers": true,
     "lib": [
       "dom",
       "dom.iterable",
