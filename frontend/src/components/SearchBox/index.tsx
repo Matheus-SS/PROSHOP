@@ -14,6 +14,7 @@ const SearchBox = () => {
     } else {
       history.push('/');
     }
+    setKeyword('');
   };
 
   return (

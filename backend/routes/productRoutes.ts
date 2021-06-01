@@ -20,6 +20,11 @@ productRouter.post(
 // @access     Public
 productRouter.get('/', asyncHandler(productController.getProducts));
 
+// @desc       Fetch products rated
+// @route      GET /api/products
+// @access     Public
+productRouter.get('/top', asyncHandler(productController.getTopProducts));
+
 // @desc       Fetch single products
 // @route      GET /api/products/:id
 // @access     Public

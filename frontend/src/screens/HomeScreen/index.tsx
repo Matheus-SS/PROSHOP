@@ -10,6 +10,7 @@ import Paginate from '../../components/Paginate';
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
 import { useParams } from 'react-router';
 import axios from 'axios';
+import ProductCarousel from '../../components/ProductCarousel';
 
 interface IParams {
   keyword: string;
@@ -59,22 +60,34 @@ const HomeScreen = () => {
 
   return (
     <>
-      <h1>Latest Products</h1>
-      {loading ? (
-        <Loader />
-      ) : error ? (
-        <Message variant="danger">{error}</Message>
+      {!keyword && <ProductCarousel />}
+
+      {products.length === 0 ? (
+        <Row>
+          <Col>
+            <h2>No products</h2>
+          </Col>
+        </Row>
       ) : (
         <>
-          <Row>
-            {products?.map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
+          <h1>Latest Products</h1>
+          {loading ? (
+            <Loader />
+          ) : error ? (
+            <Message variant="danger">{error}</Message>
+          ) : (
+            <>
+              <Row>
+                {products?.map((product) => (
+                  <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                    <Product product={product} />
+                  </Col>
+                ))}
+              </Row>
 
-          <Paginate totalOfPages={quantityPage} currentPage={currentPage} />
+              <Paginate totalOfPages={quantityPage} currentPage={currentPage} />
+            </>
+          )}
         </>
       )}
     </>

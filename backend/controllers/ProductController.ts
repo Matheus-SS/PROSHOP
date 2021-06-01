@@ -104,4 +104,17 @@ export default class ProductController {
     const updatedProduct = await product.save();
     return response.status(201).json(updatedProduct);
   }
+
+  // @desc     Get top rated products
+  // @route    GET /api/products/top
+  // @access   Public
+
+  public async getTopProducts(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+    return response.status(200).json(products);
+  }
 }
