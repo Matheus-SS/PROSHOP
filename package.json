@@ -55,6 +55,7 @@
     "@types/multer": "^1.4.5",
     "@types/nodemailer": "^6.4.0",
     "@types/nodemailer-sendgrid": "^1.0.0",
+    "@types/react-helmet": "^6.1.1",
     "@types/sharp": "^0.28.0",
     "concurrently": "^5.3.0",
     "jest": "24.9.0",

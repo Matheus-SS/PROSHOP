@@ -27,6 +27,7 @@ import Message from '../../components/Message';
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
 import { useFetch } from '../../hooks/useFetch';
 import axios from 'axios';
+import Meta from '../../components/Meta';
 
 type UrlParams = { id: string };
 
@@ -110,6 +111,7 @@ const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
         <Message variant="danger">{errorProduct}</Message>
       ) : (
         <Fragment>
+          <Meta title={product.name} />
           <Row>
             <Col md={5}>
               <Image src={product.image} alt={product.name} fluid />

@@ -6,11 +6,12 @@ import Product from '../../components/Product';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import Paginate from '../../components/Paginate';
-
+import { Link } from 'react-router-dom';
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
 import { useParams } from 'react-router';
 import axios from 'axios';
 import ProductCarousel from '../../components/ProductCarousel';
+import Meta from '../../components/Meta';
 
 interface IParams {
   keyword: string;
@@ -60,7 +61,14 @@ const HomeScreen = () => {
 
   return (
     <>
-      {!keyword && <ProductCarousel />}
+      <Meta />
+      {!keyword ? (
+        <ProductCarousel />
+      ) : (
+        <Link to="/" className="btn btn-light">
+          Go Back
+        </Link>
+      )}
 
       {products.length === 0 ? (
         <Row>
