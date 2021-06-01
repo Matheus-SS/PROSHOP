@@ -51,7 +51,16 @@ export const initialDataForProduct = {
   category: 'test',
   user: 'user',
   __v: 0,
-  reviews: ['test'],
+  reviews: [
+    {
+      _id: '2',
+      rating: 2,
+      name: 'string',
+      comment: 'test',
+      createdAt: '2000-10-10',
+      updatedAt: '2000-10-10',
+    },
+  ],
   createdAt: '2000-10-10',
   updatedAt: '2000-10-10',
 };
