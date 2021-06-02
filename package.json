@@ -5,7 +5,6 @@
   "repository": "https://github.com/Matheus-SS/PROSHOP.git",
   "author": "Matheus Santos <matheus_sa_santos@hotmail.com>",
   "license": "MIT",
-  "type": "module",
   "engines": {
     "node": "14.6.0"
   },
