@@ -14,7 +14,7 @@
     "copy-views": "cpx ./backend/views/** dist/backend/views",
     "copy-uploads":"cpx ./backend/uploads/** dist/backend/uploads",
     "tsc": "tsc && npm run copy-views && npm run copy-uploads",
-    "client": "yarn start --prefix frontend",
+    "client": "npm start --prefix frontend",
     "dev": "concurrently \"yarn server\" \"yarn client\"",
     "data:import": "tsnd backend/seeder.ts",
     "data:destroy": "tsnd backend/seeder.ts -d",
