@@ -75,7 +75,7 @@ uploadRouter.post(
     await data?.toFile(compressedImageFolder);
 
     //remove the file from upload paste
-    fs.unlinkSync(request.file.path);
+    await fs.promises.unlink(request.file.path);
 
     const uploadPhoto = await cloudinary.v2.uploader.upload(
       compressedImageFolder

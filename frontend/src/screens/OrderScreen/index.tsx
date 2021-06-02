@@ -27,6 +27,7 @@ const OrderScreen = ({ match, history }: RouteComponentProps<UrlParams>) => {
 
   const [loadingDelivered, setLoadingDelivered] = useState(false);
   const [delivered, setDelivered] = useState(false);
+  const [paid, setPaid] = useState(false);
 
   const orderDetails = useSelector((state: RootStore) => state.orderDetails);
   const { order, loading, error } = orderDetails;
@@ -56,6 +57,15 @@ const OrderScreen = ({ match, history }: RouteComponentProps<UrlParams>) => {
       return format(new Date(date), 'dd/MM/yyyy');
     }
   }
+
+  const PaymentResultTest = {
+    id: String(Math.random() * 1000000000),
+    status: 'paid',
+    update_time: String(new Date()),
+    payer: {
+      email_address: String(userInfo?.email),
+    },
+  };
 
   //CRIAR LOADING DE ORDERS
   useEffect(() => {
@@ -241,14 +251,12 @@ const OrderScreen = ({ match, history }: RouteComponentProps<UrlParams>) => {
               {!order?.isPaid && (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
-                  {!sdkReady ? (
-                    <Loader />
-                  ) : (
-                    <PayPalButton
-                      amount={order?.totalPrice}
-                      onSuccess={successPaymentHandler}
-                    />
-                  )}
+
+                  <Button
+                    onClick={() => successPaymentHandler(PaymentResultTest)}
+                  >
+                    Pay
+                  </Button>
                 </ListGroup.Item>
               )}
               {loadingDelivered && <Loader />}

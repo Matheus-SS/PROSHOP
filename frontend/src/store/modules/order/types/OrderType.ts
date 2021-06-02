@@ -30,7 +30,9 @@ export interface IPaymentResult {
   id: string;
   status: string;
   update_time: string;
-  email_address: string;
+  payer: {
+    email_address: string;
+  };
 }
 
 export interface IOrder {
