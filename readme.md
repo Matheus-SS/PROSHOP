@@ -14,6 +14,10 @@ Deploy da aplicação feita no heroku.
 
 [PROSHOP](https://proshop43.herokuapp.com/)
 
+login admin:
+admin@admin.com
+senha:123456
+
 Bibliotecas utilizadas até o momento:
 
 - [x] React-bootstrap
