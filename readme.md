@@ -9,7 +9,7 @@
 
 # ProShop
 
-Aplicação de um e-commerce utilizando a stack MERN (Mongo, Express, React e Node) integrando o método de pagamento do paypal.
+Aplicação de um e-commerce utilizando a stack MERN (Mongo, Express, React e Node).
 Deploy da aplicação feita no heroku.
 
 [PROSHOP](https://proshop43.herokuapp.com/)
