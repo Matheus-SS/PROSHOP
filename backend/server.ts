@@ -7,6 +7,8 @@ import connectDB from './config/database';
 import path from 'path';
 import routes from './routes';
 import morgan from 'morgan';
+import swaggerUI from 'swagger-ui-express';
+import swaggerFile from './swagger.json';
 
 import cloudinary from 'cloudinary';
 
@@ -20,13 +22,17 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json());
 
-// config image storage cloud
+//* config image storage cloud
 cloudinary.v2.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
+//* GENERATE SWAGGER UI
+if (process.env.NODE_ENV === 'development') {
+  app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerFile));
+}
 app.use(routes);
 
 const __dirname = path.resolve();
@@ -50,15 +56,15 @@ app.use(
   express.static(path.join(__dirname, '/backend/uploads/compressed'))
 );
 
-// PAYPAL
+//* PAYPAL
 app.get('/api/config/paypal', (request: Request, response: Response) => {
   response.send(process.env.PAYPAL_CLIENT_ID);
 });
 
-// handling with status error 404
+//* handling with status error 404
 app.use(notFound);
 
-// handling with status error 500
+//* handling with status error 500
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
