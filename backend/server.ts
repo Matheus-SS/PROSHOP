@@ -9,12 +9,17 @@ import routes from './routes';
 import morgan from 'morgan';
 import swaggerUI from 'swagger-ui-express';
 import swaggerFile from './swagger.json';
-
+import cors from 'cors';
 import cloudinary from 'cloudinary';
 
 connectDB();
 
 const app = express();
+app.use(
+  cors({
+    origin: '*',
+  })
+);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

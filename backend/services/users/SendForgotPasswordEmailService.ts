@@ -29,7 +29,6 @@ class SendForgotPasswordEmailService {
     if (!user) {
       throw new Error('User not found');
     }
-
     const token = v4();
 
     await this.userTokenRepository.create({

@@ -617,7 +617,7 @@
           },
           {
             "name": "pageNumber",
-            "in": "path",
+            "in": "query",
             "required": false,
             "type": "number",
             "description": "página dos produtos"
@@ -661,24 +661,79 @@
     },
     "/api/products/top": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": ["PRODUCT"],
+        "summary":"Listar produtos melhor avaliados",
+        "description": "Rota responsável por listar os produtos melhor avaliados",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/products/{id}": {
       "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "tags": ["PRODUCT"],
+        "summary": "Listar um produto",
+        "description": "Rota responsável por listar um produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do produto"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Product not Found"
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
+        "tags": ["ADMIN"],
+        "summary": "Deletar um produto",
+        "description": "Rota responsável por deletar um produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do produto",
+            "example": "61d3481a697b630004acf2d9"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product removed"
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
       },
       "put": {
         "tags": [],

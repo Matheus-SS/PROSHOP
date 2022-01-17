@@ -1,5 +1,5 @@
 interface IMailConfig {
-  driver: 'ethereal' | 'sendgrid';
+  driver: 'ethereal' | 'sendinblue';
 }
 
 export default {
