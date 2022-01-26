@@ -12,7 +12,7 @@
     "start": "node dist/backend/server.js",
     "server": "tsnd --files backend/server.ts",
     "copy-views": "cpx ./backend/views/** dist/backend/views",
-    "copy-uploads":"cpx ./backend/uploads/** dist/backend/uploads",
+    "copy-uploads": "cpx ./backend/uploads/** dist/backend/uploads",
     "tsc": "tsc && npm run copy-views && npm run copy-uploads",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"yarn server\" \"yarn client\"",
@@ -43,8 +43,6 @@
     "nodemailer": "^6.4.16",
     "nodemailer-sendgrid": "^1.0.3",
     "sharp": "^0.28.1",
-    "sib-api-v3-sdk": "^8.2.1",
-    "sib-api-v3-typescript": "^2.2.2",
     "swagger-ui-express": "^4.1.6",
     "tsoa": "^3.5.1",
     "uuidv4": "^6.2.6"
