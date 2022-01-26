@@ -41,13 +41,14 @@ export default class ProductController {
     response: Response
   ): Promise<Response> {
     const product = await Product.findById(request.params.id);
-
-    if (product) {
+    try {
+      if (!product) {
+        throw new Error('Product not found');
+      }
       await product.remove();
       return response.json({ message: 'Product removed' });
-    } else {
-      response.status(404);
-      throw new Error('Product not found');
+    } catch (error: any) {
+      return response.status(404).json({ message: error.message });
     }
   }
 

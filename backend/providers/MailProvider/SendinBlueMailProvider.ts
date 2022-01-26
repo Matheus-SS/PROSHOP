@@ -1,22 +1,23 @@
 import nodemailer, { Transporter } from 'nodemailer';
-import nodemailerSendgrid from 'nodemailer-sendgrid';
 import { IMailTemplate } from '../MailTemplate/IMailTemplateDTO';
 import { IMailProvider } from './IMailProvider';
 import { ISendEmail } from './ISendMailDTO';
 
-class SendGridMailProvider implements IMailProvider {
+class SendinBlueMailProvider implements IMailProvider {
   private client!: Transporter;
   private mailTemplateProvider: IMailTemplate;
 
   constructor(mailTemplateProvider: IMailTemplate) {
     this.mailTemplateProvider = mailTemplateProvider;
 
-    const transporter = nodemailer.createTransport(
-      nodemailerSendgrid({
-        apiKey: process.env.SENDGRID_API_KEY || 'default',
-      })
-    );
-
+    const transporter = nodemailer.createTransport({
+      host: process.env.SENDINBLUE_HOST,
+      port: Number(process.env.SENDINBLUE_PORT),
+      auth: {
+        user: process.env.SENDINBLUE_USER,
+        pass: process.env.SENDINBLUE_PASS,
+      },
+    });
     this.client = transporter;
   }
 
@@ -26,7 +27,8 @@ class SendGridMailProvider implements IMailProvider {
     templateData,
     from,
   }: ISendEmail): Promise<void> {
-    await this.client.sendMail({
+    const message = await this.client.sendMail({
+      replyTo: '@no-reply',
       from: {
         name: from?.name || 'Equipe ProShop',
         address: from?.email || 'froste43@gmail.com',
@@ -35,11 +37,13 @@ class SendGridMailProvider implements IMailProvider {
         name: to.name,
         address: to.email,
       },
-
       subject: subject,
       html: await this.mailTemplateProvider.parse(templateData),
     });
+
+    console.log('Message sent: %s', message.messageId);
+    // Preview only available when sending through an Ethereal account
   }
 }
 
-export default SendGridMailProvider;
+export default SendinBlueMailProvider;

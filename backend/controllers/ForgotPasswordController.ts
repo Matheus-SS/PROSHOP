@@ -6,7 +6,7 @@ import SendForgotPasswordEmailService from '../services/users/SendForgotPassword
 
 import mailConfig from '../config/mail';
 import { Request, Response } from 'express';
-import SendGridMailProvider from '../providers/MailProvider/SendGridMailProvider';
+import SendinBlueMailProvider from '../providers/MailProvider/SendinBlueMailProvider';
 
 export default class ForgotPasswordController {
   public async sendForgotPasswordEmail(
@@ -17,7 +17,7 @@ export default class ForgotPasswordController {
 
     const providers = {
       ethereal: new EtherealMailProvider(new HandlebarsMailTemplate()),
-      sendgrid: new SendGridMailProvider(new HandlebarsMailTemplate()),
+      sendinblue: new SendinBlueMailProvider(new HandlebarsMailTemplate()),
     };
 
     const sendForgotPasswordEmailService = new SendForgotPasswordEmailService(

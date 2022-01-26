@@ -132,13 +132,14 @@ export default class UserController {
     response: Response
   ): Promise<Response> {
     const user = await User.findById(request.params.id);
-
-    if (user) {
+    try {
+      if (!user) {
+        throw new Error('User not found');
+      }
       await user.remove();
       return response.json({ message: 'User removed' });
-    } else {
-      response.status(404);
-      throw new Error('User not found');
+    } catch (error: any) {
+      return response.status(404).json({ message: error.message });
     }
   }
 

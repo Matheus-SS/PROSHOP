@@ -14,7 +14,7 @@ Deploy da aplicação feita no heroku.
 
 [PROSHOP](https://proshop43.herokuapp.com/)
 
-Bibliotecas utilizadas até o momento:
+Principais bibliotecas utilizadas:
 
 - [x] React-bootstrap
 - [x] Typescript
@@ -32,22 +32,33 @@ Bibliotecas utilizadas até o momento:
 - [x] Handlebars
 - [x] Sendgrid
 - [x] BCrypt
+- [x] dotenv
+- [x] cloudinary
 
 ## Em desenvolvimento
 
 ### Front-end:
 
-- [x] Navbar
-- [x] Footer
-- [x] Listagem de produtos
 - [x] Cart
 - [x] Routes
 - [x] Login
 - [x] Logout
-- [x] Register a user
-- [x] User Profile
-- [x] Update User Profile
-- [x] Handling when the token session expires
+- [x] Registrar usuarios
+- [x] Editar perfil de usuario
+- [x] Perfil de usuários
+- [x] Listar pedidos no perfil de usuário
+- [x] Deletar usuário (admin)
+- [x] Editar usuário (admin)
+- [x] Criar produtos (admin)
+- [x] Deletar produtos (admin)
+- [x] Editar produtos (admin)
+- [x] Listagem de produtos
+- [x] Review de produtos
+- [x] Registrar endereço do usuario
+- [x] Editar endereço do usuario
+- [x] Tela de Pedidos
+- [x] Marcar pedido como entregue (admin)
+- [x] Tela de pagamento
 
 ### Back-end:
 
@@ -75,8 +86,13 @@ Bibliotecas utilizadas até o momento:
 
 ##### Products
 
-- [x] GET `/api/products` Return all products (public)
-- [x] GET `/api/products/:id` Return a specific product by id (public)
+- [x] GET `/api/products` retornar todos os produtos (public)
+- [x] GET `/api/products/:id` retornar um produto pelo id (public)
+- [x] GET `/api/products/top` retornar produtos com o maior rating (public)
+- [x] PUT `/api/products/:id` editar produtos (admin)
+- [x] POST `/api/products` criar produtos (admin)
+- [x] POST `/api/products/:id/reviews` criar review em um produto (public)
+- [x] DELETE `/api/products/:id` deletar produtos (admin)
 
 ##### User
 

@@ -1,0 +1,1110 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "REST API PROSHOP",
+    "description": "API do ecommerce PROSHOP",
+    "contact": {
+      "name": "API Support PROSHOP",
+      "email": "froste43@gmail.com"
+    }
+  },
+
+  "servers": [
+    {
+      "url":"http://localhost:5000",
+      "description": "API de desenvolvimento"
+    },
+    {
+      "url":"https://proshop43.herokuapp.com",
+      "description": "API de produção"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT" 
+        }
+    },
+    "schemas": {
+      "User": {
+        "type":"object",
+        "required":[
+          "name",
+          "email",
+          "password"
+        ],
+        "properties":{
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "isAdmin": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type":"string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type":"string",
+            "format": "date"
+          }
+        }
+      },
+      "Review": {
+        "type":"object",
+        "required":[
+          "name",
+          "rating",
+          "comment",
+          "user"
+        ],
+        "properties":{
+          "user": {
+            "type": "string",
+            "example":"61d3481a697b630004acf204"
+          },
+          "name": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "number"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type":"string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type":"string",
+            "format": "date"
+          }
+        }
+      },
+      "Product": {
+        "type":"object",
+        "required":[
+          "user",
+          "name",
+          "image",
+          "brand",
+          "category",
+          "description",
+          "rating",
+          "numReviews",
+          "price",
+          "countInStock"
+        ],
+        "properties":{
+          "user": {
+            "type": "string",
+            "example":"61d3481a697b630004acf204"
+          },
+          "name": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "reviews": {
+            "type": "array",
+            "items": {
+              "$ref":"#/components/schemas/Review"
+            }
+          },
+          "rating": {
+            "type":"number"
+          },
+          "numReviews": {
+            "type":"number"
+          },
+          "price": {
+            "type":"number"
+          },
+          "countInStock": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type":"string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type":"string",
+            "format": "date"
+          }
+        }
+      }
+    }  
+  },
+  "paths": {
+    "/api/users/login": {
+      "post": {
+        "tags": ["AUTHENTICATION"],
+        "summary": "Autenticação de usuários",
+        "description": "Rota responsável pela autenticação",
+        "parameters":[],
+        "requestBody": {
+          "x-name":"body",
+          "content": {
+            "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type":"string",
+                      "format":"email",
+                      "example": "jane@example.com"
+                    },
+                    "password": {
+                      "type":"string",
+                      "example": "123456"
+                    }
+                  }
+                }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Incorrect email/password combination."  
+          },
+          "200": {
+            "description": "Retorno do login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/LoginResponse"
+                }
+              }
+            } 
+          }
+        }
+      }
+    },
+    "/api/password/forgot-password": {
+      "post": {
+        "tags": ["AUTHENTICATION"],
+        "summary": "Envio de email para resetar senha",
+        "description": "Rota responsável pelo envio de email com o link para o usuário resetar a senha",
+        "requestBody": {
+          "x-name": "body",
+          "content" : {
+            "application/json" : {
+              "schema": {
+                "type": "object",
+                "properties" : {
+                  "email": { 
+                    "type":"string",
+                    "format":"email",
+                    "example": "jane@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "User not found"
+          },
+          "200": {
+            "description": "Email enviado com sucesso, verifique sua caixa de entrada, lixo eletrônico ou spam"
+          }
+        }
+      }
+    },
+    "/api/password/reset": {
+      "post": {
+        "tags": ["AUTHENTICATION"],
+        "summary": "Resetar senha do usuário",
+        "description": "Rota responsável por resetar senha do usuário",
+        "requestBody": {
+          "x-name":"body",
+          "content": {
+            "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "94c522bd-57b5-490d-973c-e5187a6c6bc7"
+                    },
+                    "password": {
+                      "type":"string",
+                      "example": "123456"
+                    },
+                    "confirm_password": {
+                      "type":"string",
+                      "example": "123456"
+                    }
+                  }
+                }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description":"Token does not exists / User does not exists / Token expired / Confirm password different from password"
+          },
+          "200": {
+            "description": "Password change successfully"
+          }
+        }
+      }
+    },
+    "/api/users/": {
+      "post": {
+        "tags": ["USER"],
+        "summary":"Criar usuários",
+        "description": "Rota responsável por criar usuários",
+        "requestBody": {
+          "x-name": "body",
+          "content" : {
+            "application/json" : {
+              "schema": {
+                "type": "object",
+                "properties" : {
+                  "name": { 
+                    "type":"string",
+                    "example": "Jane"
+                  },
+                  "email": { 
+                    "type":"string",
+                    "format":"email",
+                    "example": "jane@example.com"
+                  },
+                  "password": { 
+                    "type":"string",
+                    "example": "jane@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/CreateUserResponse"
+                }
+              }
+            } 
+          }
+        }
+      },
+      "get": {
+        "tags": ["ADMIN"],
+        "security" : [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Listar todos os usuários",
+        "description": "Rota responsável pela listagem de todos os usuários",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            } 
+          }
+        }
+      }
+    },
+    "/api/users/profile": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["USER"],
+        "summary": "Listar usuário logado",
+        "description": "Rota responsável por mostrar usuário logado",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/GetProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["USER"],
+        "summary": "Atualizar usuário logado",
+        "description": "Rota responsável por atualizar usuário logado",
+        "requestBody": {
+          "x-name":"body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type":"string",
+                    "example": "Jane"
+                  },
+                  "email": {
+                    "type":"string",
+                    "format":"email",
+                    "example": "jane@example.com"
+                  },
+                  "password": {
+                    "type":"string",
+                    "example": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description":"User not found / Email already in use"
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UpdateProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["ADMIN"],
+        "summary": "Listar um usuário",
+        "description": "Rota responsável por listar um usuário",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do usuário."
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "User not found"  
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            } 
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["ADMIN"],
+        "summary":"Atualizar um usuário",
+        "description": "Rota responsável por atualizar um usuário",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do usuário."
+          }
+        ],
+        "requestBody": {
+          "x-name": "body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type":"string",
+                    "format":"email",
+                    "example": "Jane"
+                  },
+                  "email": {
+                    "type":"string",
+                    "format":"email",
+                    "example": "jane@example.com"
+                  },
+                  "isAdmin": {
+                    "type":"boolean",
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "User not found"  
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/UpdateUserResponse"
+                }
+              }
+            } 
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["ADMIN"],
+        "summary":"Deletar um usuário",
+        "description": "Rota responsável por deletar um usuário",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do usuário."
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "User not found"  
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/definitions/DeleteUserResponse"
+                }
+              }
+            } 
+          }
+        }
+      }
+    },
+    "/api/products/{id}/reviews": {
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["PRODUCT"],
+        "summary": "Criar review de um produto",
+        "description": "Rota responsável por criar review de um produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do produto."
+          }
+        ],
+        "requestBody" : {
+          "x-name": "body", 
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "number",
+                    "example": 5
+                  },
+                  "comment": {
+                    "type":"string",
+                    "example": "These are great headphones"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Product not found / You already reviewed this product"  
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            } 
+          }
+        }
+      }
+    },
+    "/api/products/": {
+      "get": {
+        "tags": ["PRODUCT"],
+        "summary": "Listar todos os produtos",
+        "description": "Rota responsável por listar todas as rotas",
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "nome do produto a ser listado"
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "required": false,
+            "type": "number",
+            "description": "página dos produtos"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                    "$ref": "#/definitions/ListProductResponse"
+                }
+              }
+            } 
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": ["ADMIN"],
+        "summary": "Criar um produto",
+        "description": "Rota reponsável por criar um produto com dados genéricos",
+        "responses": {
+          "200": {
+            "description":"Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/CreateProductResponse"
+                }
+              }
+            } 
+          }
+        }
+      }
+    },
+    "/api/products/top": {
+      "get": {
+        "tags": ["PRODUCT"],
+        "summary":"Listar produtos melhor avaliados",
+        "description": "Rota responsável por listar os produtos melhor avaliados",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "tags": ["PRODUCT"],
+        "summary": "Listar um produto",
+        "description": "Rota responsável por listar um produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do produto"
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Product not Found"
+          },
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["ADMIN"],
+        "summary": "Deletar um produto",
+        "description": "Rota responsável por deletar um produto",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "ID do produto",
+            "example": "61d3481a697b630004acf2d9"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product removed"
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    
+    "/api/address/": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    
+    "/api/orders/": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "orderItems": {
+                  "example": "any"
+                },
+                "shippingAddress": {
+                  "example": "any"
+                },
+                "paymentMethod": {
+                  "example": "any"
+                },
+                "itemsPrice": {
+                  "example": "any"
+                },
+                "taxPrice": {
+                  "example": "any"
+                },
+                "shippingPrice": {
+                  "example": "any"
+                },
+                "totalPrice": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/orders/myorders": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/orders/{id}/pay": {
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "update_time": {
+                  "example": "any"
+                },
+                "payer": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/orders/{id}/deliver": {
+      "put": {
+        "tags": [],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/api/upload/": {
+      "post": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    }
+  },
+  "definitions": {
+    "LoginResponse": {
+      "type":"object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "60b6d7e3892e222e04811756"
+        },
+        "name": {
+          "type": "string",
+          "example": "Jane Doe"
+        },
+        "email": {
+          "type": "string",
+          "example": "jane@example.com"
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "example": false
+        },
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYjZkN2UzODkyZTIyMmUwNDgxMTc1NiIsImlhdCI6MTYzNDU4OTUyNywiZXhwIjoxNjM0Njc1OTI3fQ.w3duWX_ZhF5RoFO4KHedXgcdAset8Kd7uvxOD5JKj_k"
+        }
+      }
+    },
+    "CreateUserResponse": {
+      "type":"object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "60b6d7e3892e222e04811756"
+        },
+        "name": {
+          "type": "string",
+          "example": "Jane"
+        },
+        "email": {
+          "type": "string",
+          "example": "jane@example.com"
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "example": false
+        },
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYjZkN2UzODkyZTIyMmUwNDgxMTc1NiIsImlhdCI6MTYzNDU4OTUyNywiZXhwIjoxNjM0Njc1OTI3fQ.w3duWX_ZhF5RoFO4KHedXgcdAset8Kd7uvxOD5JKj_k"
+        }
+      }
+    },
+    "GetProfileResponse": {
+      "type":"object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "60b6d7e3892e222e04811756"
+        },
+        "name": {
+          "type": "string",
+          "example": "Jane"
+        },
+        "email": {
+          "type": "string",
+          "example": "jane@example.com"
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "example": false
+        }
+      }
+    },
+    "UpdateProfileResponse": {
+      "type":"object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "60b6d7e3892e222e04811756"
+        },
+        "name": {
+          "type": "string",
+          "example": "Jane"
+        },
+        "email": {
+          "type": "string",
+          "example": "jane@example.com"
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "example": false
+        },
+        "token": {
+          "type": "string",
+          "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwYjZkN2UzODkyZTIyMmUwNDgxMTc1NiIsImlhdCI6MTYzNDU4OTUyNywiZXhwIjoxNjM0Njc1OTI3fQ.w3duWX_ZhF5RoFO4KHedXgcdAset8Kd7uvxOD5JKj_k"
+        }
+      }
+    },
+    "UpdateUserResponse": {
+      "type":"object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "60b6d7e3892e222e04811756"
+        },
+        "name": {
+          "type": "string",
+          "example": "Jane"
+        },
+        "email": {
+          "type": "string",
+          "example": "jane@example.com"
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "example": false
+        }
+      }
+    },
+    "DeleteUserResponse": {
+      "type":"object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "User removed"
+        }
+      }
+    },
+    "ListProductResponse": {
+      "type":"object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref":"#/components/schemas/Product"
+          }
+        },
+        "currentPage": {
+          "type": "number",
+          "example": 1
+        },
+        "quantityPages": {
+          "type": "number",
+          "example": 2
+        }
+      }
+    },
+    "CreateProductResponse": {
+      "type":"object",
+      "properties":{
+        "user": {
+          "type": "string",
+          "example":"61d3481a697b630004acf204"
+        },
+        "name": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "reviews": {
+          "type": "array",
+          "example":[]
+        },
+        "rating": {
+          "type":"number"
+        },
+        "numReviews": {
+          "type":"number"
+        },
+        "price": {
+          "type":"number"
+        },
+        "countInStock": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type":"string",
+          "format": "date"
+        },
+        "updatedAt": {
+          "type":"string",
+          "format": "date"
+        }
+      }
+    }
+  }
+}
+  
