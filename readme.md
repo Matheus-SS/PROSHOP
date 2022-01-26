@@ -14,15 +14,11 @@ Deploy da aplicação feita no heroku.
 
 [PROSHOP](https://proshop43.herokuapp.com/)
 
-<<<<<<< HEAD
-Principais bibliotecas utilizadas:
-=======
 login admin:
 admin@admin.com
 senha:123456
 
 Bibliotecas utilizadas até o momento:
->>>>>>> aac7873a60855d7b90a6ad98d68a0dc2fd4450c4
 
 - [x] React-bootstrap
 - [x] Typescript
