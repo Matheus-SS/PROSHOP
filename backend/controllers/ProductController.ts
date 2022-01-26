@@ -10,7 +10,7 @@ export default class ProductController {
   public async getProducts(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const getProducts = new ListAllProductService(new ProductRepository());
     const productData = {
       keyword: String(request.query.keyword),
@@ -20,17 +20,19 @@ export default class ProductController {
     const { products, currentPage, quantityPages } = await getProducts.execute(
       productData
     );
-    return response.status(200).json({ products, currentPage, quantityPages });
+    response.status(200).json({ products, currentPage, quantityPages });
+    return;
   }
 
   public async getProductById(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const getProductById = new ListProductByIdService(new ProductRepository());
     const product = await getProductById.execute(request.params.id);
 
-    return response.status(200).json(product);
+    response.status(200).json(product);
+    return;
   }
 
   // @desc       Delete a product
@@ -59,7 +61,7 @@ export default class ProductController {
   public async createProduct(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const product = new Product({
       name: 'Sample name',
       price: 0,
@@ -73,7 +75,8 @@ export default class ProductController {
     });
 
     const createdProduct = await product.save();
-    return response.status(201).json(createdProduct);
+    response.status(201).json(createdProduct);
+    return;
   }
 
   // @desc     Update a product
@@ -83,7 +86,7 @@ export default class ProductController {
   public async updateProduct(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const { name, price, description, image, brand, category, countInStock } =
       request.body;
 
@@ -103,7 +106,8 @@ export default class ProductController {
     }
 
     const updatedProduct = await product.save();
-    return response.status(201).json(updatedProduct);
+    response.status(201).json(updatedProduct);
+    return;
   }
 
   // @desc     Get top rated products
@@ -113,9 +117,10 @@ export default class ProductController {
   public async getTopProducts(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const products = await Product.find({}).sort({ rating: -1 }).limit(3);
 
-    return response.status(200).json(products);
+    response.status(200).json(products);
+    return;
   }
 }

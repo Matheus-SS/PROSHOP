@@ -1,6 +1,6 @@
 import path from 'path';
 import express, { Request, Response } from 'express';
-import multer from 'multer';
+import multer, { Multer } from 'multer';
 import cloudinary from 'cloudinary';
 import asyncHandler from 'express-async-handler';
 import sharp from 'sharp';
@@ -62,33 +62,34 @@ uploadRouter.post(
   '/',
   upload.single('image'),
   asyncHandler(async (request: Request, response: Response) => {
-    const { filename: image } = request.file;
+    const image = request.file?.filename ?? 'image';
 
+    const destination = request.file?.destination ?? 'destination';
     const compressedImageFolder = path.resolve(
-      request.file.destination,
+      destination,
       'compressed',
       image
     );
-    const data = checkFileTypeToCompress(request.file);
+    const file = request.file ?? ('file' as unknown as Express.Multer.File);
+    const data = checkFileTypeToCompress(file);
 
     //send the image compressed to a folder's name compressed
     await data?.toFile(compressedImageFolder);
 
     //remove the file from upload paste
-    await fs.promises.unlink(request.file.path);
+    await fs.promises.unlink(request.file?.path ?? 'path');
 
     const uploadPhoto = await cloudinary.v2.uploader.upload(
       compressedImageFolder
     );
 
     //remove the file from compressed paste
-    await fs.promises.unlink(
-      path.resolve(request.file.destination, 'compressed', image)
-    );
+    await fs.promises.unlink(path.resolve(destination, 'compressed', image));
 
     // console.log(uploadPhoto); // This will give you all the information back from the uploaded photo result
     // console.log(uploadPhoto.url); // This is what we want to send back now in the  res.send
-    return response.send(uploadPhoto);
+    response.send(uploadPhoto);
+    return;
   })
 );
 

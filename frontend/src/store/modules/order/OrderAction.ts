@@ -21,162 +21,155 @@ import {
 } from './types/OrderType';
 
 // this async is because is using redux thunk
-export const createOrder = (order: IOrder) => async (
-  dispatch: Dispatch<OrderDispatchTypes>,
-  getState: () => RootStore
-) => {
-  try {
-    dispatch({
-      type: ORDER_CREATE_REQUEST,
-    });
+export const createOrder =
+  (order: IOrder) =>
+  async (dispatch: Dispatch<OrderDispatchTypes>, getState: () => RootStore) => {
+    try {
+      dispatch({
+        type: ORDER_CREATE_REQUEST,
+      });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo?.token}`,
-      },
-    };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token}`,
+        },
+      };
 
-    const { data } = await axios.post(`/api/orders`, order, config);
+      const { data } = await axios.post(`/api/orders`, order, config);
 
-    dispatch({
-      type: ORDER_CREATE_SUCCESS,
-      payload: data,
-    });
+      dispatch({
+        type: ORDER_CREATE_SUCCESS,
+        payload: data,
+      });
 
-    dispatch({
-      type: CART_ITEM_REMOVE,
-      payload: data,
-    });
-    localStorage.removeItem('@ProShop:cartItems');
-  } catch (error) {
-    dispatch({
-      type: ORDER_CREATE_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
-
-// this async is because is using redux thunk
-export const getOrderDetails = (id: string) => async (
-  dispatch: Dispatch<OrderDispatchTypes>,
-  getState: () => RootStore
-) => {
-  try {
-    dispatch({
-      type: ORDER_DETAILS_REQUEST,
-    });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo?.token}`,
-      },
-    };
-
-    const { data } = await axios.get(`/api/orders/${id}`, config);
-
-    dispatch({
-      type: ORDER_DETAILS_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: ORDER_DETAILS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+      dispatch({
+        type: CART_ITEM_REMOVE,
+        payload: data,
+      });
+      localStorage.removeItem('@ProShop:cartItems');
+    } catch (error: any) {
+      dispatch({
+        type: ORDER_CREATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 // this async is because is using redux thunk
-export const payOrder = (
-  orderId: string,
-  paymentResult: IPaymentResult
-) => async (
-  dispatch: Dispatch<OrderDispatchTypes>,
-  getState: () => RootStore
-) => {
-  try {
-    dispatch({
-      type: ORDER_PAY_REQUEST,
-    });
+export const getOrderDetails =
+  (id: string) =>
+  async (dispatch: Dispatch<OrderDispatchTypes>, getState: () => RootStore) => {
+    try {
+      dispatch({
+        type: ORDER_DETAILS_REQUEST,
+      });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo?.token}`,
-      },
-    };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token}`,
+        },
+      };
 
-    const { data } = await axios.put(
-      `/api/orders/${orderId}/pay`,
-      paymentResult,
-      config
-    );
+      const { data } = await axios.get(`/api/orders/${id}`, config);
 
-    dispatch({
-      type: ORDER_PAY_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: ORDER_PAY_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+      dispatch({
+        type: ORDER_DETAILS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ORDER_DETAILS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 // this async is because is using redux thunk
-export const orderListMe = () => async (
-  dispatch: Dispatch<OrderDispatchTypes>,
-  getState: () => RootStore
-) => {
-  try {
-    dispatch({
-      type: ORDER_LIST_ME_REQUEST,
-    });
+export const payOrder =
+  (orderId: string, paymentResult: IPaymentResult) =>
+  async (dispatch: Dispatch<OrderDispatchTypes>, getState: () => RootStore) => {
+    try {
+      dispatch({
+        type: ORDER_PAY_REQUEST,
+      });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo?.token}`,
-      },
-    };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token}`,
+        },
+      };
 
-    const { data } = await axios.get(`/api/orders/myorders`, config);
+      const { data } = await axios.put(
+        `/api/orders/${orderId}/pay`,
+        paymentResult,
+        config
+      );
 
-    dispatch({
-      type: ORDER_LIST_ME_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: ORDER_LIST_ME_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+      dispatch({
+        type: ORDER_PAY_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ORDER_PAY_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+// this async is because is using redux thunk
+export const orderListMe =
+  () =>
+  async (dispatch: Dispatch<OrderDispatchTypes>, getState: () => RootStore) => {
+    try {
+      dispatch({
+        type: ORDER_LIST_ME_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token}`,
+        },
+      };
+
+      const { data } = await axios.get(`/api/orders/myorders`, config);
+
+      dispatch({
+        type: ORDER_LIST_ME_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: ORDER_LIST_ME_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };

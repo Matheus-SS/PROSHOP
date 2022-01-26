@@ -89,7 +89,7 @@ const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
 
         setProduct(response.data);
         reset();
-      } catch (error) {
+      } catch (error: any) {
         setError(
           error.response && error.response.data.message
             ? error.response.data.message

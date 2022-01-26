@@ -22,140 +22,136 @@ interface IShippingAddress {
 }
 
 // this async is because is using redux thunk
-export const getAddressInformation = () => async (
-  dispatch: Dispatch<ShippingAddressDispatchTypes>,
-  getState: () => RootStore
-) => {
-  try {
-    dispatch({
-      type: SHIPPING_ADDRESS_INFORMATION_REQUEST,
-    });
+export const getAddressInformation =
+  () =>
+  async (
+    dispatch: Dispatch<ShippingAddressDispatchTypes>,
+    getState: () => RootStore
+  ) => {
+    try {
+      dispatch({
+        type: SHIPPING_ADDRESS_INFORMATION_REQUEST,
+      });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo?.token}`,
-      },
-    };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token}`,
+        },
+      };
 
-    const { data } = await axios.get(`/api/address`, config);
+      const { data } = await axios.get(`/api/address`, config);
 
-    dispatch({
-      type: SHIPPING_ADDRESS_INFORMATION_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: SHIPPING_ADDRESS_INFORMATION_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
-
-// this async is because is using redux thunk
-export const createShippingAddress = ({
-  address,
-  city,
-  country,
-  postalCode,
-}: IShippingAddress) => async (
-  dispatch: Dispatch<ShippingAddressDispatchTypes>,
-  getState: () => RootStore
-) => {
-  try {
-    dispatch({
-      type: REGISTER_SHIPPING_ADDRESS_REQUEST,
-    });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo?.token}`,
-      },
-    };
-
-    const { data } = await axios.post(
-      `/api/address`,
-      {
-        address,
-        city,
-        postalCode,
-        country,
-      },
-      config
-    );
-
-    dispatch({
-      type: REGISTER_SHIPPING_ADDRESS_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: REGISTER_SHIPPING_ADDRESS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+      dispatch({
+        type: SHIPPING_ADDRESS_INFORMATION_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: SHIPPING_ADDRESS_INFORMATION_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 // this async is because is using redux thunk
-export const updateShippingAddress = ({
-  address,
-  city,
-  country,
-  postalCode,
-}: IShippingAddress) => async (
-  dispatch: Dispatch<ShippingAddressDispatchTypes>,
-  getState: () => RootStore
-) => {
-  try {
-    dispatch({
-      type: UPDATE_SHIPPING_ADDRESS_REQUEST,
-    });
+export const createShippingAddress =
+  ({ address, city, country, postalCode }: IShippingAddress) =>
+  async (
+    dispatch: Dispatch<ShippingAddressDispatchTypes>,
+    getState: () => RootStore
+  ) => {
+    try {
+      dispatch({
+        type: REGISTER_SHIPPING_ADDRESS_REQUEST,
+      });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo?.token}`,
-      },
-    };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token}`,
+        },
+      };
 
-    const { data } = await axios.put(
-      `/api/address`,
-      {
-        address,
-        city,
-        postalCode,
-        country,
-      },
-      config
-    );
+      const { data } = await axios.post(
+        `/api/address`,
+        {
+          address,
+          city,
+          postalCode,
+          country,
+        },
+        config
+      );
 
-    dispatch({
-      type: UPDATE_SHIPPING_ADDRESS_SUCCESS,
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: UPDATE_SHIPPING_ADDRESS_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-    });
-  }
-};
+      dispatch({
+        type: REGISTER_SHIPPING_ADDRESS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: REGISTER_SHIPPING_ADDRESS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+// this async is because is using redux thunk
+export const updateShippingAddress =
+  ({ address, city, country, postalCode }: IShippingAddress) =>
+  async (
+    dispatch: Dispatch<ShippingAddressDispatchTypes>,
+    getState: () => RootStore
+  ) => {
+    try {
+      dispatch({
+        type: UPDATE_SHIPPING_ADDRESS_REQUEST,
+      });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/address`,
+        {
+          address,
+          city,
+          postalCode,
+          country,
+        },
+        config
+      );
+
+      dispatch({
+        type: UPDATE_SHIPPING_ADDRESS_SUCCESS,
+        payload: data,
+      });
+    } catch (error: any) {
+      dispatch({
+        type: UPDATE_SHIPPING_ADDRESS_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };

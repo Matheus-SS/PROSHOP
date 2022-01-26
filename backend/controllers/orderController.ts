@@ -35,7 +35,8 @@ export const addOrderItems = asyncHandler(
 
       const createdOrder = await order.save();
 
-      return response.status(200).json(createdOrder);
+      response.status(200).json(createdOrder);
+      return;
     }
   }
 );
@@ -51,7 +52,8 @@ export const getOrderById = asyncHandler(
     );
 
     if (order) {
-      return response.json(order);
+      response.json(order);
+      return;
     } else {
       response.status(404);
       throw new Error('Order not found');
@@ -77,7 +79,8 @@ export const updateOrderToPaid = asyncHandler(
         });
 
       const updatedOrder = await order.save();
-      return response.json(updatedOrder);
+      response.json(updatedOrder);
+      return;
     } else {
       response.status(404);
       throw new Error('Order not found');
@@ -119,7 +122,8 @@ export const updateOrderToDelivered = asyncHandler(
       order.deliveredAt = new Date();
 
       const updatedOrder = await order.save();
-      return response.json(updatedOrder);
+      response.json(updatedOrder);
+      return;
     } else {
       response.status(404);
       throw new Error('Order not found');

@@ -12,7 +12,7 @@ export default class ForgotPasswordController {
   public async sendForgotPasswordEmail(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const { email } = request.body;
 
     const providers = {
@@ -28,10 +28,11 @@ export default class ForgotPasswordController {
 
     await sendForgotPasswordEmailService.execute(email);
 
-    return response
+    response
       .status(200)
       .json(
         'Email enviado com sucesso, verifique sua caixa de entrada, lixo eletrônico ou spam'
       );
+    return;
   }
 }

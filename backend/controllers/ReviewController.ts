@@ -11,7 +11,7 @@ export default class ReviewController {
   public async createProductReview(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const { rating, comment } = request.body;
 
     const products = await Product.findById(request.params.id);
@@ -54,6 +54,7 @@ export default class ReviewController {
     products.rating = averageRating;
 
     const newProduct = await products.save();
-    return response.status(201).json(newProduct);
+    response.status(201).json(newProduct);
+    return;
   }
 }
