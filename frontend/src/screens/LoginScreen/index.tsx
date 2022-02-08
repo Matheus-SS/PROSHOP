@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -27,14 +27,15 @@ const LoginScreen = () => {
   const location = useLocation();
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
-  const history = useHistory();
+  const history = useNavigate();
 
-  AxiosInitiation(history);
-
+  //AxiosInitiation(history);
+  
   useEffect(() => {
     if (userInfo) {
+      
       //send to initial page when user loggs in
-      history.push(redirect);
+      history(redirect,{replace:true});
     }
   }, [history, userInfo, redirect]);
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col, Table } from 'react-bootstrap';
 import { format } from 'date-fns';
 import { RootStore } from '../../store';
@@ -26,7 +26,7 @@ const ProfileScreen = () => {
 
   const dispatch = useDispatch();
 
-  const history = useHistory();
+  const history = useNavigate();
 
   const userDetails = useSelector((state: RootStore) => {
     return state.userDetails;
@@ -52,7 +52,7 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     if (!userLoginInfo) {
-      history.push('/');
+      history('/');
     }
   }, [history, userLoginInfo]);
 

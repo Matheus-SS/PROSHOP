@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootStore } from '../../store';
 import { addToCart } from '../../store/modules/cart/CartAction';
 
-import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -28,10 +28,12 @@ import { IProduct } from '../../store/modules/product/types/ProductTypes';
 import { useFetch } from '../../hooks/useFetch';
 import axios from 'axios';
 import Meta from '../../components/Meta';
+import { useParams } from 'react-router';
 
 type UrlParams = { id: string };
 
-const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
+const ProductScreen:React.FC = () => {
+  const params = useParams<UrlParams>();
   const [quantity, setQuantity] = useState<number>(1);
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>('');
@@ -39,7 +41,7 @@ const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
 
   const [product, setProduct] = useState<IProduct>({} as IProduct);
 
-  const history = useHistory();
+  const history = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -50,7 +52,7 @@ const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
     data: prod,
     loading,
     error: errorProduct,
-  } = useFetch<IProduct>(`/api/products/${match.params.id}`);
+  } = useFetch<IProduct>(`/api/products/${params.id}`);
 
   useEffect(() => {
     setProduct(prod);
@@ -67,9 +69,9 @@ const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
 
   // add item to cart
   const addToCartHandler = useCallback(() => {
-    dispatch(addToCart(match.params.id, quantity));
-    history.push('/cart');
-  }, [history, match.params.id, quantity, dispatch]);
+    dispatch(addToCart(quantity,params.id));
+    history('/cart');
+  }, [history, params.id, quantity, dispatch]);
 
   const reset = () => {
     setRating(0);
@@ -80,7 +82,7 @@ const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
       e.preventDefault();
       try {
         const response = await axios.post(
-          `/api/products/${match.params.id}/reviews`,
+          `/api/products/${params.id}/reviews`,
           {
             rating,
             comment,
@@ -97,7 +99,7 @@ const ProductScreen = ({ match }: RouteComponentProps<UrlParams>) => {
         );
       }
     },
-    [rating, comment, match.params.id]
+    [rating, comment, params.id]
   );
 
   return (

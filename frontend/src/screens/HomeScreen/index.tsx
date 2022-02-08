@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row,Nav } from 'react-bootstrap';
 
 import Product from '../../components/Product';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 import Paginate from '../../components/Paginate';
-import { Link } from 'react-router-dom';
+import { Link,useParams } from 'react-router-dom';
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
-import { useParams } from 'react-router';
 import axios from 'axios';
 import ProductCarousel from '../../components/ProductCarousel';
 import Meta from '../../components/Meta';
 
-interface IParams {
+type IParams = {
   keyword: string;
   pageNumber: string;
 }
@@ -65,9 +64,9 @@ const HomeScreen = () => {
       {!keyword ? (
         <ProductCarousel />
       ) : (
-        <Link to="/" className="btn btn-light">
+        <Nav.Link as={Link} to="/" className="btn btn-light">
           Go Back
-        </Link>
+        </Nav.Link>
       )}
 
       {products.length === 0 ? (

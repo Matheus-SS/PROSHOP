@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -15,7 +15,7 @@ const OrderListScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const history = useHistory();
+  const history = useNavigate();
 
   const userLogin = useSelector((state: RootStore) => state.userLogin);
   const { userInfo } = userLogin;
@@ -23,7 +23,7 @@ const OrderListScreen = () => {
   //send user to login if its not a admin
   useEffect(() => {
     if (!userInfo?.isAdmin) {
-      history.push('/login');
+      history('/login');
     }
   }, [history, userInfo]);
 

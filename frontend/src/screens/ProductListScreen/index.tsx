@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Link, RouteComponentProps, useParams } from 'react-router-dom';
+import { Link, useParams,useNavigate } from 'react-router-dom';
 import { Button, Table, Row, Col } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -13,12 +13,14 @@ import axios from 'axios';
 
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
 
-interface IParams {
+type IParams = {
   pageNumber: string;
 }
 
-const ProductListScreen = ({ history }: RouteComponentProps) => {
+const ProductListScreen :React.FC = () => {
   const { pageNumber = 1 } = useParams<IParams>();
+  const history = useNavigate();
+
   const cancelToken = axios.CancelToken;
   const source = cancelToken.source();
 
@@ -69,7 +71,7 @@ const ProductListScreen = ({ history }: RouteComponentProps) => {
   //send user to login if its not a admin
   useEffect(() => {
     if (!userInfo?.isAdmin) {
-      history.push('/login');
+      history('/login');
     }
   }, [history, userInfo]);
 
@@ -90,7 +92,7 @@ const ProductListScreen = ({ history }: RouteComponentProps) => {
     try {
       const { data } = await axios.post('/api/products');
       setLoadingCreateProduct(false);
-      history.push(`/admin/product/${data._id}/edit`);
+      history(`/admin/product/${data._id}/edit`);
     } catch (error) {
       setLoadingCreateProduct(false);
       setErrorLoadingCreateProduct('error when trying to create a new product');

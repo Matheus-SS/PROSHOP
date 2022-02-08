@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
 import { Form, Button, Col } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -8,9 +7,11 @@ import { cartSavePaymentMethod } from '../../store/modules/cart/CartAction';
 
 import FormContainer from '../../components/FormContainer';
 import CheckoutSteps from '../../components/CheckoutSteps';
+import { useNavigate } from 'react-router';
 
-const PaymentScreen = ({ history }: RouteComponentProps) => {
+const PaymentScreen :React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState('Paypal');
+  const history = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -26,13 +27,13 @@ const PaymentScreen = ({ history }: RouteComponentProps) => {
 
   useEffect(() => {
     if (!userLoginInfo) {
-      history.push('/login');
+      history('/login');
     }
   }, [history, userLoginInfo]);
 
   useEffect(() => {
     if (!shippingAddressInfo) {
-      history.push('/shipping');
+      history('/shipping');
     }
   }, [shippingAddressInfo, history]);
 
@@ -40,7 +41,7 @@ const PaymentScreen = ({ history }: RouteComponentProps) => {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       dispatch(cartSavePaymentMethod(paymentMethod));
-      history.push('/placeorder');
+      history('/placeorder');
     },
     [dispatch, history, paymentMethod]
   );

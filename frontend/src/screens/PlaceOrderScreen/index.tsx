@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -13,7 +13,7 @@ import Message from '../../components/Message';
 
 const PlaceOrderScreen = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
 
   useEffect(() => {
     dispatch(getAddressInformation());
@@ -76,7 +76,7 @@ const PlaceOrderScreen = () => {
 
   useEffect(() => {
     if (success) {
-      history.push(`/order/${order?._id}`);
+      history(`/order/${order?._id}`);
     }
   }, [history, success, order]);
 

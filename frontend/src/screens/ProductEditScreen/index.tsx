@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Form, Button, Row, Col, Image, ProgressBar } from 'react-bootstrap';
 
 import Message from '../../components/Message';
@@ -9,11 +9,13 @@ import { useFetch } from '../../hooks/useFetch';
 import { IProduct } from '../../store/modules/product/types/ProductTypes';
 import axios from 'axios';
 import { isImage } from '../../utils/fileChecker';
+import { useParams } from 'react-router';
 
 type UrlParams = { id: string };
 
-const ProductEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
-  const productId = match.params.id;
+const ProductEditScreen :React.FC = () =>  {
+  const params = useParams<UrlParams>()
+  const productId = params.id;
 
   const [name, setName] = useState<string>('');
   const [price, setPrice] = useState<number>(0);

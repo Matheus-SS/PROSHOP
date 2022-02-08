@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route,Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -27,57 +27,55 @@ import PageNotFound from './screens/PageNotFound';
 const App = () => {
   return (
     <BrowserRouter>
-      <Header />
+     <Header /> 
       <main className="py-3">
-        <Container>
-          <Switch>
-            <Route exact path="/" component={HomeScreen} />
+       <Container>
+          <Routes>
+            <Route  path="/" element={<HomeScreen/>} />
             <Route
               path="/search/:keyword/page/:pageNumber"
-              component={HomeScreen}
+              element={HomeScreen}
             />
-            <Route path="/page/:pageNumber" component={HomeScreen} />
-            <Route path="/search/:keyword" component={HomeScreen} />
+            <Route path="/page/:pageNumber" element={<HomeScreen/>} />
+            <Route path="/search/:keyword" element={<HomeScreen/>} />
 
-            <Route path="/order/:id" component={OrderScreen} />
-            <Route path="/admin/orderList" component={OrderListScreen} />
+            <Route path="/order/:id" element={<OrderScreen/>} />
+            <Route path="/admin/orderList" element={<OrderListScreen/>} />
 
-            <Route path="/placeorder" component={PlaceOrderScreen} />
-            <Route path="/payment" component={PaymentScreen} />
-            <Route path="/reset-password" component={ResetPasswordScreen} />
-            <Route path="/forgot-password" component={ForgotPasswordScreen} />
-            <Route path="/login" component={LoginScreen} />
-            <Route path="/register" component={RegisterScreen} />
-            <Route path="/profile" component={ProfileScreen} />
-            <Route path="/product/:id" component={ProductScreen} />
+            <Route path="/placeorder" element={<PlaceOrderScreen/>} />
+            <Route path="/payment" element={<PaymentScreen/>} />
+            <Route path="/reset-password" element={<ResetPasswordScreen/>} />
+            <Route path="/forgot-password" element={<ForgotPasswordScreen/>} />
+            <Route path="/login" element={<LoginScreen/>} />
+            <Route path="/register" element={<RegisterScreen/>} />
+            <Route path="/profile" element={<ProfileScreen/>} />
+            <Route path="/product/:id" element={<ProductScreen/>} />
             <Route
               path="/admin/product/:id/edit"
-              component={ProductEditScreen}
+              element={<ProductEditScreen/>}
             />
             <Route
-              exact
               path="/admin/productList"
-              component={ProductListScreen}
+              element={<ProductListScreen/>}
             />
             <Route
-              exact
               path="/admin/productList/page/:pageNumber"
-              component={ProductListScreen}
+              element={<ProductListScreen/>}
             />
 
-            <Route path="/cart" component={CartScreen} />
-            <Route path="/admin/userList" component={UserListScreen} />
-            <Route path="/admin/user/:id/edit" component={UserEditScreen} />
+            <Route path="/cart" element={<CartScreen/>} />
+            <Route path="/admin/userList" element={<UserListScreen/>} />
+            <Route path="/admin/user/:id/edit" element={<UserEditScreen/>} />
 
-            <Route path="/shipping" component={ShippingScreen} />
+            <Route path="/shipping" element={<ShippingScreen/>} />
 
             <Route
               path="/register_shipping"
-              component={RegisterShippingScreen}
+              element={<RegisterShippingScreen/>}
             />
-            <Route component={PageNotFound} />
-          </Switch>
-        </Container>
+            <Route element={<PageNotFound/>} />
+          </Routes>
+        </Container> 
       </main>
       <Footer />
     </BrowserRouter>

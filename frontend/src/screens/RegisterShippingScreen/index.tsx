@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -19,7 +19,9 @@ import FormContainer from '../../components/FormContainer';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 
-const RegisterShippingScreen = ({ history }: RouteComponentProps) => {
+const RegisterShippingScreen :React.FC = () => {
+  const history = useNavigate();
+
   const [address, setAddress] = useState('');
   const [city, setCity] = useState<string>('');
   const [postalCode, setPostalCode] = useState('');
@@ -55,7 +57,7 @@ const RegisterShippingScreen = ({ history }: RouteComponentProps) => {
   //use effect to redirects to login if user is not logged in
   useEffect(() => {
     if (!userLoginInfo) {
-      history.push('/login');
+      history('/login');
     }
   }, [history, userLoginInfo]);
 

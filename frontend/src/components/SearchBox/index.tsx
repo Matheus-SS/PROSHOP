@@ -1,18 +1,22 @@
 import React, { FormEvent, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+<<<<<<< Updated upstream
 import { useHistory } from 'react-router';
+=======
+import { useNavigate } from 'react-router-dom';
+>>>>>>> Stashed changes
 
 const SearchBox = () => {
   const [keyword, setKeyword] = useState('');
 
-  const history = useHistory();
+  const history = useNavigate();
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (keyword.trim()) {
-      history.push(`/search/${keyword}`);
+      history(`/search/${keyword}`);
     } else {
-      history.push('/');
+      history('/');
     }
     setKeyword('');
   };

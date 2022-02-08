@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
+import { Link,useParams,useNavigate } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -16,8 +16,10 @@ import FormContainer from '../../components/FormContainer';
 
 type UrlParams = { id: string };
 
-const UserEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
-  const userId = match.params.id;
+const UserEditScreen :React.FC = () => {
+  const params = useParams<UrlParams>();
+
+  const userId = params.id;
 
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -40,18 +42,18 @@ const UserEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
     success: successUpdate,
   } = userUpdate;
 
-  const history = useHistory();
+  const history = useNavigate();
 
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: USER_UPDATE_REMOVE });
-      history.push('/admin/userList');
+      history('/admin/userList');
     }
   }, [successUpdate, history, dispatch]);
 
   useEffect(() => {
     if (!userInfo?.name || userInfo._id !== userId) {
-      dispatch(getUserDetails(userId));
+      dispatch(getUserDetails(String(userId)));
     } else {
       setName(userInfo.name);
       setEmail(userInfo.email);
@@ -62,7 +64,7 @@ const UserEditScreen = ({ match }: RouteComponentProps<UrlParams>) => {
   const submitHandler = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      dispatch(updateUser({ _id: userId, name, email, isAdmin }));
+      dispatch(updateUser({ _id: String(userId), name, email, isAdmin }));
     },
     [dispatch, name, email, isAdmin, userId]
   );

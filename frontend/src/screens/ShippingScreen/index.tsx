@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { RouteComponentProps, Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -12,7 +12,9 @@ import CheckoutSteps from '../../components/CheckoutSteps';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 
-const ShippingScreen = ({ history }: RouteComponentProps) => {
+const ShippingScreen :React.FC = () =>  {
+  const history = useNavigate();
+
   const [address, setAddress] = useState<string | undefined>('');
   const [city, setCity] = useState<string | undefined>('');
   const [postalCode, setPostalCode] = useState<string | undefined>('');
@@ -39,7 +41,7 @@ const ShippingScreen = ({ history }: RouteComponentProps) => {
     if (userLoginInfo) {
       dispatch(getAddressInformation());
     } else {
-      history.push('/login');
+      history('/login');
     }
   }, [dispatch, history, userLoginInfo]);
 
@@ -55,7 +57,7 @@ const ShippingScreen = ({ history }: RouteComponentProps) => {
   const submitHandler = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      history.push('/payment');
+      history('/payment');
     },
     [history]
   );

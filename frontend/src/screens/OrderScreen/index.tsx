@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { PayPalButton } from 'react-paypal-button-v2';
 
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -17,11 +17,15 @@ import { IPaymentResult } from '../../store/modules/order/types/OrderType';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
 import format from 'date-fns/format';
+import { useNavigate, useParams } from 'react-router';
 
 type UrlParams = { id: string };
 
-const OrderScreen = ({ match, history }: RouteComponentProps<UrlParams>) => {
+const OrderScreen:React.FC = () => {
   const dispatch = useDispatch();
+  const params = useParams<UrlParams>();
+  const history = useNavigate();
+
 
   const [sdkReady, setSdkReady] = useState<boolean>(false);
 
@@ -61,7 +65,7 @@ const OrderScreen = ({ match, history }: RouteComponentProps<UrlParams>) => {
   useEffect(() => {
     setDelivered(false);
     if (!userInfo) {
-      history.push('/login');
+      history('/login');
     }
     if (order?.isDelivered) {
       setDelivered(order.isDelivered);
@@ -83,7 +87,7 @@ const OrderScreen = ({ match, history }: RouteComponentProps<UrlParams>) => {
       document.body.appendChild(script);
     };
 
-    dispatch(getOrderDetails(match.params.id));
+    dispatch(getOrderDetails(String(params.id)));
 
     if (!order?.isPaid) {
       if ((window as any).paypal === undefined) {
@@ -92,11 +96,11 @@ const OrderScreen = ({ match, history }: RouteComponentProps<UrlParams>) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, match.params.id, successPay]);
+  }, [dispatch, params.id, successPay]);
 
   const successPaymentHandler = (paymentResult: IPaymentResult) => {
     //console.log(paymentResult);
-    dispatch(payOrder(match.params.id, paymentResult));
+    dispatch(payOrder(String(params.id), paymentResult));
   };
 
   const deliverHandler = async () => {

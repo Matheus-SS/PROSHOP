@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, Table } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -11,7 +11,7 @@ import Loader from '../../components/Loader';
 
 const UserListScreen = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const userList = useSelector((state: RootStore) => state.userList);
   const { loading, error, users } = userList;
 
@@ -31,7 +31,7 @@ const UserListScreen = () => {
     if (userInfo && userInfo.isAdmin) {
       dispatch(listUsers());
     } else {
-      history.push('/login');
+      history('/login');
     }
   }, [dispatch, successDelete, userInfo, history]);
 

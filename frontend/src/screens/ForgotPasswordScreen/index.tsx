@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { RootStore } from '../../store';
@@ -16,12 +16,12 @@ const ForgotPasswordScreen = () => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
 
-  const history = useHistory();
+  const history = useNavigate();
   const userLogin = useSelector((store: RootStore) => store.userLogin);
 
   useEffect(() => {
     if (userLogin.userInfo) {
-      history.push('/');
+      history('/');
     }
   }, [history, userLogin.userInfo]);
 

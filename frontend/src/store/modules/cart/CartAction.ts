@@ -16,6 +16,7 @@ import { RootStore } from '../../../store';
 
 // this async is because is using redux thunk
 
+<<<<<<< Updated upstream
 export const addToCart = (id: string, quantity: number) => async (
   dispatch: Dispatch<CartDispatchTypes>,
   getState: () => RootStore
@@ -24,6 +25,15 @@ export const addToCart = (id: string, quantity: number) => async (
     dispatch({
       type: CART_ADD_ITEM_REQUEST,
     });
+=======
+export const addToCart =
+  (quantity: number, id?: string) =>
+  async (dispatch: Dispatch<CartDispatchTypes>, getState: () => RootStore) => {
+    try {
+      dispatch({
+        type: CART_ADD_ITEM_REQUEST,
+      });
+>>>>>>> Stashed changes
 
     const { data } = await axios.get(`/api/products/${id}`);
 

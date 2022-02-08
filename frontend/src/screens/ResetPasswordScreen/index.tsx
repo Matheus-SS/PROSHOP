@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 import Message from '../../components/Message';
@@ -14,13 +14,13 @@ const ResetPasswordScreen = () => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
 
-  const history = useHistory();
+  const history = useNavigate();
   const location = useLocation();
   const token = location.search.split('=')[1];
 
   useEffect(() => {
     if (!token) {
-      history.push('/');
+      history('/');
     }
   });
 

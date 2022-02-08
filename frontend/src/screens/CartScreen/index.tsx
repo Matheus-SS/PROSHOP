@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -17,7 +17,7 @@ import { addToCart, removeFromCart } from '../../store/modules/cart/CartAction';
 const CartScreen = () => {
   const cart = useSelector((state: RootStore) => state.cart);
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const { cartItems } = cart;
 
   function arrayFromCountInStock(countInStock: number) {
@@ -50,7 +50,7 @@ const CartScreen = () => {
   };
 
   const checkoutHandler = () => {
-    history.push('/login?redirect=shipping');
+    history('/login?redirect=/shipping');
   };
 
   return (
@@ -86,7 +86,7 @@ const CartScreen = () => {
                       value={cartItem.quantity}
                       onChange={(e) =>
                         dispatch(
-                          addToCart(cartItem.product, Number(e.target.value))
+                          addToCart(Number(e.target.value),cartItem.product)
                         )
                       }
                     >

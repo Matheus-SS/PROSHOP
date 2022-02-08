@@ -11,7 +11,7 @@ export const HeaderLayout: React.FunctionComponent<IHeaderLayout> = ({
 }) => (
   <Route
     {...rest}
-    render={(props: any) => (
+   element={(props: any) => (
       <>
         <Header />
         <Component {...props} />
