@@ -68,7 +68,7 @@ export const login =
       });
 
       localStorage.setItem('@ProShop:userInfo', JSON.stringify(data));
-    } catch (error) {
+    } catch (error: any) {
       dispatch({
         type: USER_LOGIN_FAIL,
         payload:
@@ -123,7 +123,7 @@ export const registerUser =
       });
 
       localStorage.setItem('@ProShop:userInfo', JSON.stringify(data));
-    } catch (error) {
+    } catch (error: any) {
       dispatch({
         type: USER_REGISTER_FAIL,
         payload:
@@ -158,7 +158,7 @@ export const getUserDetails =
         type: USER_DETAILS_SUCCESS,
         payload: data,
       });
-    } catch (error) {
+    } catch (error: any) {
       dispatch({
         type: USER_DETAILS_FAIL,
         payload:
@@ -200,7 +200,7 @@ export const updateUserProfile =
       });
 
       localStorage.setItem('@ProShop:userInfo', JSON.stringify(data));
-    } catch (error) {
+    } catch (error: any) {
       dispatch({
         type: USER_UPDATE_PROFILE_FAIL,
         payload:
@@ -236,7 +236,7 @@ export const listUsers =
         type: USER_LIST_SUCCESS,
         payload: data,
       });
-    } catch (error) {
+    } catch (error: any) {
       dispatch({
         type: USER_LIST_FAIL,
         payload:
@@ -271,7 +271,7 @@ export const deleteUser =
       dispatch({
         type: USER_DELETE_SUCCESS,
       });
-    } catch (error) {
+    } catch (error: any) {
       dispatch({
         type: USER_DELETE_FAIL,
         payload:
@@ -311,7 +311,7 @@ export const updateUser =
         type: USER_DETAILS_SUCCESS,
         payload: data,
       });
-    } catch (error) {
+    } catch (error: any) {
       dispatch({
         type: USER_UPDATE_FAIL,
         payload:

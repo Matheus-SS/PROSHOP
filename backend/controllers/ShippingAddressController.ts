@@ -14,7 +14,7 @@ export default class ShippingAddressController {
   public async createShippingAddress(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const { address, city, postalCode, country } = request.body;
     const userId = request.userId;
     const createShippingAddressService = new CreateShippingAddressService(
@@ -30,7 +30,8 @@ export default class ShippingAddressController {
       userId,
     });
 
-    return response.status(200).json(shippingAddress);
+    response.status(200).json(shippingAddress);
+    return;
   }
 
   // // @desc       Get user address
@@ -39,7 +40,7 @@ export default class ShippingAddressController {
   public async getUserShippingAddress(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const userId = request.userId;
     const showUserShippingAddressService = new ShowUserShippingAddressService(
       new UsersRepository(),
@@ -50,7 +51,8 @@ export default class ShippingAddressController {
       userId
     );
 
-    return response.status(200).json(shippingAddress);
+    response.status(200).json(shippingAddress);
+    return;
   }
 
   // // @desc       Update Shipping Address
@@ -59,7 +61,7 @@ export default class ShippingAddressController {
   public async updateShippingAddress(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const { address, city, postalCode, country } = request.body;
     const userId = request.userId;
     const updateShippingAddressService = new UpdateShippingAddressService(
@@ -75,6 +77,7 @@ export default class ShippingAddressController {
       country,
     });
 
-    return response.status(200).json(shippingAddress);
+    response.status(200).json(shippingAddress);
+    return;
   }
 }

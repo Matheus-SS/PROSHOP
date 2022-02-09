@@ -30,12 +30,11 @@ const LoginScreen = () => {
   const history = useNavigate();
 
   //AxiosInitiation(history);
-  
+
   useEffect(() => {
     if (userInfo) {
-      
       //send to initial page when user loggs in
-      history(redirect,{replace:true});
+      history(redirect, { replace: true });
     }
   }, [history, userInfo, redirect]);
 
@@ -80,7 +79,7 @@ const LoginScreen = () => {
 
       <Row className="py-2">
         <Col>
-          <Link to={'forgot-password'}>Forgot password</Link>
+          <Link to={'/forgot-password'}>Forgot password</Link>
         </Col>
       </Row>
 

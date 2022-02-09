@@ -62,33 +62,38 @@ uploadRouter.post(
   '/',
   upload.single('image'),
   asyncHandler(async (request: Request, response: Response) => {
-    const { filename: image } = request.file;
+    const file = request.file;
+
+    const image = file?.filename || 'image';
+
+    const destination = request.file?.destination || 'destination';
 
     const compressedImageFolder = path.resolve(
-      request.file.destination,
+      destination,
       'compressed',
       image
     );
-    const data = checkFileTypeToCompress(request.file);
+    const data = checkFileTypeToCompress(
+      request.file as unknown as Express.Multer.File
+    );
 
     //send the image compressed to a folder's name compressed
     await data?.toFile(compressedImageFolder);
 
     //remove the file from upload paste
-    fs.unlinkSync(request.file.path);
+    fs.unlinkSync(request.file?.path || 'path');
 
     const uploadPhoto = await cloudinary.v2.uploader.upload(
       compressedImageFolder
     );
 
     //remove the file from compressed paste
-    await fs.promises.unlink(
-      path.resolve(request.file.destination, 'compressed', image)
-    );
+    await fs.promises.unlink(path.resolve(destination, 'compressed', image));
 
     // console.log(uploadPhoto); // This will give you all the information back from the uploaded photo result
     // console.log(uploadPhoto.url); // This is what we want to send back now in the  res.send
-    return response.send(uploadPhoto);
+    response.send(uploadPhoto);
+    return;
   })
 );
 

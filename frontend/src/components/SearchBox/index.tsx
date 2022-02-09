@@ -1,10 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-<<<<<<< Updated upstream
-import { useHistory } from 'react-router';
-=======
 import { useNavigate } from 'react-router-dom';
->>>>>>> Stashed changes
 
 const SearchBox = () => {
   const [keyword, setKeyword] = useState('');

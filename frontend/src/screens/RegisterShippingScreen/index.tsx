@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -19,7 +19,7 @@ import FormContainer from '../../components/FormContainer';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 
-const RegisterShippingScreen :React.FC = () => {
+const RegisterShippingScreen: React.FC = () => {
   const history = useNavigate();
 
   const [address, setAddress] = useState('');
@@ -183,7 +183,7 @@ const RegisterShippingScreen :React.FC = () => {
 
           <Row className="py-3">
             <Col>
-              <Link to={'shipping'}>GO BACK</Link>
+              <Link to={'/shipping'}>GO BACK</Link>
             </Col>
           </Row>
         </>

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 import { RootStore } from '../../store';
@@ -12,7 +12,7 @@ import CheckoutSteps from '../../components/CheckoutSteps';
 import Message from '../../components/Message';
 import Loader from '../../components/Loader';
 
-const ShippingScreen :React.FC = () =>  {
+const ShippingScreen: React.FC = () => {
   const history = useNavigate();
 
   const [address, setAddress] = useState<string | undefined>('');
@@ -30,12 +30,8 @@ const ShippingScreen :React.FC = () =>  {
   const shippingAddressDetails = useSelector((state: RootStore) => {
     return state.shippingAddressInformation;
   });
-  const {
-    error,
-    success,
-    loading,
-    shippingAddressInfo,
-  } = shippingAddressDetails; // shipping address info from redux
+  const { error, success, loading, shippingAddressInfo } =
+    shippingAddressDetails; // shipping address info from redux
 
   useEffect(() => {
     if (userLoginInfo) {
@@ -122,7 +118,9 @@ const ShippingScreen :React.FC = () =>  {
           </Form>
           <Row className="py-3">
             <Col>
-              <Link to={'register_shipping'}>Register or update a address</Link>
+              <Link to={'/register_shipping'}>
+                Register or update a address
+              </Link>
             </Col>
           </Row>
         </>

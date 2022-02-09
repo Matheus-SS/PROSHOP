@@ -32,7 +32,7 @@ import { useParams } from 'react-router';
 
 type UrlParams = { id: string };
 
-const ProductScreen:React.FC = () => {
+const ProductScreen: React.FC = () => {
   const params = useParams<UrlParams>();
   const [quantity, setQuantity] = useState<number>(1);
   const [rating, setRating] = useState<number>(0);
@@ -69,7 +69,7 @@ const ProductScreen:React.FC = () => {
 
   // add item to cart
   const addToCartHandler = useCallback(() => {
-    dispatch(addToCart(quantity,params.id));
+    dispatch(addToCart(quantity, params.id));
     history('/cart');
   }, [history, params.id, quantity, dispatch]);
 
@@ -91,7 +91,7 @@ const ProductScreen:React.FC = () => {
 
         setProduct(response.data);
         reset();
-      } catch (error) {
+      } catch (error: any) {
         setError(
           error.response && error.response.data.message
             ? error.response.data.message

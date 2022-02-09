@@ -10,7 +10,7 @@ export default class ResetPasswordController {
   public async resetPassword(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const { token, password, confirm_password } = request.body;
 
     const resetPasswordService = new ResetPasswordService(
@@ -25,6 +25,7 @@ export default class ResetPasswordController {
       confirm_password,
     });
 
-    return response.status(200).json('Password change successfully');
+    response.status(200).json('Password change successfully');
+    return;
   }
 }

@@ -14,10 +14,7 @@ export default class UserController {
   // // @desc       Register a new user
   // // @route      POST /api/users
   // // @access     Public
-  public async createUser(
-    request: Request,
-    response: Response
-  ): Promise<Response> {
+  public async createUser(request: Request, response: Response): Promise<void> {
     const { name, email, password } = request.body;
     const createUser = new CreateUserService(
       new UsersRepository(),
@@ -25,13 +22,14 @@ export default class UserController {
     );
     const { user, token } = await createUser.execute({ name, email, password });
 
-    return response.status(200).json({
+    response.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
       token: token,
     });
+    return;
   }
 
   // @desc       Get user profile
@@ -40,19 +38,20 @@ export default class UserController {
   public async getUserProfile(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const userId = request.userId;
 
     const getUserProfile = new ShowUserProfileService(new UsersRepository());
 
     const user = await getUserProfile.execute(userId);
 
-    return response.status(200).json({
+    response.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
     });
+    return;
   }
 
   // @desc       Authenticate user & get token
@@ -61,7 +60,7 @@ export default class UserController {
   public async authenticateUser(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const { email, password } = request.body;
 
     const authenticateUser = new AuthenticateUserService(
@@ -71,13 +70,14 @@ export default class UserController {
 
     const { user, token } = await authenticateUser.execute({ email, password });
 
-    return response.status(200).json({
+    response.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
       token: token,
     });
+    return;
   }
 
   // @desc       Update user profile
@@ -86,7 +86,7 @@ export default class UserController {
   public async updateUserProfile(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const { name, email, password } = request.body;
     const userId = request.userId;
 
@@ -103,13 +103,14 @@ export default class UserController {
       userId,
     });
 
-    return response.status(200).json({
+    response.status(200).json({
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
       token: token,
     });
+    return;
   }
 
   // @desc       Get users
@@ -149,11 +150,12 @@ export default class UserController {
   public async getUserById(
     request: Request,
     response: Response
-  ): Promise<Response> {
+  ): Promise<void> {
     const user = await User.findById(request.params.id).select('-password');
 
     if (user) {
-      return response.status(200).json(user);
+      response.status(200).json(user);
+      return;
     } else {
       response.status(404);
       throw new Error('User not found');
@@ -163,10 +165,7 @@ export default class UserController {
   // @desc       Update user
   // @route      PUT /api/users/:id
   // @access     Private/Admin
-  public async updateUser(
-    request: Request,
-    response: Response
-  ): Promise<Response> {
+  public async updateUser(request: Request, response: Response): Promise<void> {
     const user = await User.findById(request.params.id);
 
     if (user) {
@@ -177,12 +176,13 @@ export default class UserController {
 
       const updatedUser = await user.save();
 
-      return response.json({
+      response.json({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
       });
+      return;
     } else {
       response.status(404);
       throw new Error('User not found');
