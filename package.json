@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.25.1",
+    "cloudinary": "^1.37.3",
     "colorts": "^0.1.63",
     "cors": "^2.8.5",
     "cpx": "^1.5.0",
